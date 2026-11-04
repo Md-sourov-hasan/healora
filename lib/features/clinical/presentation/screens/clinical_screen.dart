@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -22,7 +23,7 @@ class ClinicalScreen extends StatelessWidget {
     final double? bmi = controller.bmi;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,11 +43,11 @@ class ClinicalScreen extends StatelessWidget {
                         ),
                         style: HealoraTypography.h1(isBangla: state.isBangla),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
                           color: HealoraColors.mist,
@@ -65,7 +66,7 @@ class ClinicalScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Verified health workers capture structured vitals with medical device attribution and offline outbox sync.',
@@ -84,9 +85,9 @@ class ClinicalScreen extends StatelessWidget {
                 children: [
                   if (state.isOffline || state.offlineOutbox.isNotEmpty) ...[
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
                         color: HealoraColors.warnBg,
@@ -100,7 +101,7 @@ class ClinicalScreen extends StatelessWidget {
                             size: 18,
                             color: HealoraColors.warnFg,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           Text(
                             state.t(
                               'Offline Outbox: ${state.offlineOutbox.length} pending',
@@ -114,7 +115,7 @@ class ClinicalScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
                     HealoraButton.small(
                       label: state.t('Sync Outbox Now', 'এখনই সিঙ্ক করুন'),
                       onPressed: () {
@@ -135,9 +136,9 @@ class ClinicalScreen extends StatelessWidget {
                     ),
                   ] else ...[
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
                         color: HealoraColors.okBg,
@@ -150,7 +151,7 @@ class ClinicalScreen extends StatelessWidget {
                             size: 18,
                             color: HealoraColors.okFg,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           Text(
                             state.t(
                               'Central Record Synchronized',
@@ -170,13 +171,13 @@ class ClinicalScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           if (activeEncounter == null) ...[
             HealoraCard.tint(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(32),
+                  padding: EdgeInsets.all(32.r),
                   child: Text(
                     state.t(
                       'No active encounter found. Please check in a patient first.',
@@ -198,8 +199,8 @@ class ClinicalScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 52,
-                        height: 52,
+                        width: 52.w,
+                        height: 52.h,
                         decoration: BoxDecoration(
                           color: HealoraColors.teal,
                           borderRadius: BorderRadius.circular(16),
@@ -212,7 +213,7 @@ class ClinicalScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,11 +227,11 @@ class ClinicalScreen extends StatelessWidget {
                                     isBangla: state.isBangla,
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10.w),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w,
+                                    vertical: 2.h,
                                   ),
                                   decoration: BoxDecoration(
                                     color: HealoraColors.mist,
@@ -244,7 +245,7 @@ class ClinicalScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 HealoraStatusPill(
                                   label: activeEncounter.statusLabel,
                                   type:
@@ -255,7 +256,7 @@ class ClinicalScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Text(
                               '${activeEncounter.patientAge} ${state.t("yrs", "বছর")}, ${activeEncounter.patientGender} · ${activeEncounter.hubName} · ${state.t("Assigned Worker:", "দায়িত্বপ্রাপ্ত স্বাস্থ্যকর্মী:")} ${activeEncounter.assignedWorker}',
                               style: HealoraTypography.caption(
@@ -292,7 +293,7 @@ class ClinicalScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
 
             // Two Columns Layout: Left = Vitals Capture Form, Right = Recorded Observations & Doctor Review
             LayoutBuilder(
@@ -306,19 +307,24 @@ class ClinicalScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            state.t(
-                              'Standard Vitals Checklist',
-                              'স্ট্যান্ডার্ড ভাইটালস চেকপয়েন্ট',
-                            ),
-                            style: HealoraTypography.h3(
-                              isBangla: state.isBangla,
+                          Expanded(
+                            child: Text(
+                              state.t(
+                                'Standard Vitals Checklist',
+                                'স্ট্যান্ডার্ড ভাইটালস চেকপয়েন্ট',
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: HealoraTypography.h3(
+                                isBangla: state.isBangla,
+                              ),
                             ),
                           ),
+                          SizedBox(width: 8.w),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 3.h,
                             ),
                             decoration: BoxDecoration(
                               color: HealoraColors.mist,
@@ -337,7 +343,7 @@ class ClinicalScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6.h),
                       Text(
                         state.t(
                           'PRD Rule: Structured numerical inputs with explicit units. Missing values must never be stored as zero.',
@@ -349,7 +355,7 @@ class ClinicalScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       // Device Selection
                       Text(
@@ -362,10 +368,10 @@ class ClinicalScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ).copyWith(fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6.h),
                       Container(
-                        height: 52,
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        height: 52.h,
+                        padding: EdgeInsets.symmetric(horizontal: 14.w),
                         decoration: BoxDecoration(
                           color: HealoraColors.paper,
                           borderRadius: HealoraSpacing.borderControl,
@@ -411,7 +417,7 @@ class ClinicalScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       // Blood Pressure Row
                       Row(
@@ -427,7 +433,7 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: HealoraTextField(
                               controller: controller.diastolicController,
@@ -439,7 +445,7 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: HealoraTextField(
                               controller: controller.pulseController,
@@ -454,7 +460,7 @@ class ClinicalScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // SpO2 and Temperature
                       Row(
@@ -470,7 +476,7 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: HealoraTextField(
                               controller: controller.temperatureController,
@@ -485,7 +491,7 @@ class ClinicalScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // Blood Glucose & Context
                       Row(
@@ -502,7 +508,7 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             flex: 2,
                             child: Column(
@@ -515,11 +521,11 @@ class ClinicalScreen extends StatelessWidget {
                                     isBangla: state.isBangla,
                                   ).copyWith(fontWeight: FontWeight.w600),
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: 6.h),
                                 Container(
-                                  height: 56,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
+                                  height: 56.h,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w,
                                   ),
                                   decoration: BoxDecoration(
                                     color: HealoraColors.paper,
@@ -560,7 +566,7 @@ class ClinicalScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // Height, Weight, Derived BMI
                       Row(
@@ -574,7 +580,7 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: HealoraTextField(
                               controller: controller.weightController,
@@ -584,13 +590,13 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: Container(
-                              height: 56,
-                              margin: const EdgeInsets.only(top: 22),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
+                              height: 56.h,
+                              margin: EdgeInsets.only(top: 22.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 14.w,
                               ),
                               decoration: BoxDecoration(
                                 color: HealoraColors.mist,
@@ -626,11 +632,11 @@ class ClinicalScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       // Repeat Measurement Section (PRD Rule 5.6: Never overwrite, preserve repeat reason)
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.all(12.r),
                         decoration: BoxDecoration(
                           color: HealoraColors.bone,
                           borderRadius: HealoraSpacing.borderControl,
@@ -650,7 +656,7 @@ class ClinicalScreen extends StatelessWidget {
                                   onChanged: (v) =>
                                       controller.setRepeatReading(v ?? false),
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6.w),
                                 Expanded(
                                   child: Text(
                                     state.t(
@@ -666,7 +672,7 @@ class ClinicalScreen extends StatelessWidget {
                               ],
                             ),
                             if (controller.isRepeatReading) ...[
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               HealoraTextField(
                                 controller: controller.repeatReasonController,
                                 label: state.t(
@@ -681,7 +687,7 @@ class ClinicalScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       HealoraButton.primary(
                         fullWidth: true,
@@ -747,11 +753,11 @@ class ClinicalScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
 
                           if (activeEncounter.observations.isEmpty) ...[
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              padding: EdgeInsets.symmetric(vertical: 24.h),
                               child: Center(
                                 child: Text(
                                   state.t(
@@ -770,9 +776,9 @@ class ClinicalScreen extends StatelessWidget {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: activeEncounter.observations.length,
-                              separatorBuilder: (_, __) => const Divider(
+                              separatorBuilder: (_, __) => Divider(
                                 color: HealoraColors.line,
-                                height: 16,
+                                height: 16.h,
                               ),
                               itemBuilder: (context, idx) {
                                 final Observation obs =
@@ -781,8 +787,8 @@ class ClinicalScreen extends StatelessWidget {
                                 return Row(
                                   children: [
                                     Container(
-                                      width: 40,
-                                      height: 40,
+                                      width: 40.w,
+                                      height: 40.h,
                                       decoration: BoxDecoration(
                                         color: obs.isFlaggedAbnormal
                                             ? HealoraColors.warnBg
@@ -799,7 +805,7 @@ class ClinicalScreen extends StatelessWidget {
                                             : HealoraColors.teal,
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    SizedBox(width: 12.w),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -866,7 +872,7 @@ class ClinicalScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Local Doctor Review Section (PRD Section 6.2 & 9.7)
                     HealoraCard(
@@ -876,8 +882,8 @@ class ClinicalScreen extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                width: 36,
-                                height: 36,
+                                width: 36.w,
+                                height: 36.h,
                                 decoration: BoxDecoration(
                                   color: HealoraColors.ink,
                                   borderRadius: BorderRadius.circular(10),
@@ -888,7 +894,7 @@ class ClinicalScreen extends StatelessWidget {
                                   size: 20,
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -915,7 +921,7 @@ class ClinicalScreen extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
 
                           HealoraTextField(
                             controller: controller.doctorAssessmentController,
@@ -927,7 +933,7 @@ class ClinicalScreen extends StatelessWidget {
                             isBangla: state.isBangla,
                           ),
 
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
 
                           HealoraTextField(
                             controller: controller.doctorPlanController,
@@ -939,7 +945,7 @@ class ClinicalScreen extends StatelessWidget {
                             isBangla: state.isBangla,
                           ),
 
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14.h),
 
                           // Disposition Selector
                           Text(
@@ -952,10 +958,10 @@ class ClinicalScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ).copyWith(fontWeight: FontWeight.w600),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 6.h),
                           Container(
-                            height: 52,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            height: 52.h,
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: HealoraColors.paper,
                               borderRadius: HealoraSpacing.borderControl,
@@ -1017,7 +1023,7 @@ class ClinicalScreen extends StatelessWidget {
                             ),
                           ),
 
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
 
                           HealoraButton.primary(
                             fullWidth: true,
@@ -1052,7 +1058,7 @@ class ClinicalScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(flex: 5, child: vitalsForm),
-                      const SizedBox(width: 24),
+                      SizedBox(width: 24.w),
                       Expanded(flex: 5, child: observationsAndDoctor),
                     ],
                   );
@@ -1060,7 +1066,7 @@ class ClinicalScreen extends StatelessWidget {
                   return Column(
                     children: [
                       vitalsForm,
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                       observationsAndDoctor,
                     ],
                   );

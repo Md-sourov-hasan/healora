@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -124,7 +125,7 @@ class HealoraStatusPill extends StatelessWidget {
 
     return Container(
       height: HealoraSpacing.pillHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: HealoraSpacing.borderPill,
@@ -135,14 +136,14 @@ class HealoraStatusPill extends StatelessWidget {
         children: [
           if (showDot) ...[
             Container(
-              width: 8,
-              height: 8,
+              width: 8.w,
+              height: 8.h,
               decoration: BoxDecoration(
                 color: dot,
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6.w),
           ],
           Text(
             label,

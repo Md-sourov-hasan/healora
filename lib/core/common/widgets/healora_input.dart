@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -73,7 +74,7 @@ class _HealoraTextFieldState extends State<HealoraTextField> {
               isBangla: widget.isBangla,
             ).copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 6), // 6px gap from design system
+          SizedBox(height: 6.h), // 6px gap from design system
         ],
         Container(
           height: widget.maxLines > 1 ? null : widget.height,
@@ -109,7 +110,7 @@ class _HealoraTextFieldState extends State<HealoraTextField> {
               ),
               prefixIcon: widget.prefixIcon != null
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
                       child: widget.prefixIcon,
                     )
                   : null,
@@ -118,7 +119,7 @@ class _HealoraTextFieldState extends State<HealoraTextField> {
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             ),
           ),
         ),
@@ -149,17 +150,17 @@ class HealoraSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: 56.h,
       decoration: BoxDecoration(
         color: HealoraColors.paper,
         borderRadius: HealoraSpacing.borderControl,
         border: Border.all(color: HealoraColors.line, width: 1),
       ),
-      padding: const EdgeInsets.only(left: 16, right: 6),
+      padding: EdgeInsets.only(left: 16.w, right: 6.w),
       child: Row(
         children: [
           const Icon(Icons.search, color: HealoraColors.slate, size: 22),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: TextField(
               controller: controller,
@@ -183,8 +184,8 @@ class HealoraSearchBar extends StatelessWidget {
           ),
           if (onVoice != null) ...[
             Container(
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.h,
               decoration: const BoxDecoration(
                 color: HealoraColors.ink,
                 shape: BoxShape.circle,

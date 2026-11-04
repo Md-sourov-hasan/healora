@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -18,7 +19,7 @@ class SessionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = controller.state;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,7 +36,7 @@ class SessionsScreen extends StatelessWidget {
                     ),
                     style: HealoraTypography.h1(isBangla: state.isBangla),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Manage scheduled clinic days, mobile camps, capacity slots, and mandatory staffing gates.',
@@ -59,7 +60,7 @@ class SessionsScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // PRD Acceptance Rule Card (Section 9.1 & 12.2)
           HealoraCard.tint(
@@ -71,7 +72,7 @@ class SessionsScreen extends StatelessWidget {
                   color: HealoraColors.teal,
                   size: 24,
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +88,7 @@ class SessionsScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(
                         state.t(
                           'Per PRD G-07: A session cannot be published or accept patient bookings unless mandatory team roles (Special Team Lead, Field Worker, Local Doctor) and calibrated medical equipment are actively confirmed.',
@@ -105,14 +106,14 @@ class SessionsScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // List of Sessions
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.sessions.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            separatorBuilder: (_, __) => SizedBox(height: 16.h),
             itemBuilder: (context, idx) {
               final HubSession session = state.sessions[idx];
 
@@ -124,8 +125,8 @@ class SessionsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 48,
-                          height: 48,
+                          width: 48.w,
+                          height: 48.h,
                           decoration: BoxDecoration(
                             color: session.sessionType == 'Special Camp'
                                 ? const Color(0xFFFBE4E4)
@@ -141,7 +142,7 @@ class SessionsScreen extends StatelessWidget {
                                 : HealoraColors.pine,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,11 +156,11 @@ class SessionsScreen extends StatelessWidget {
                                       isBangla: state.isBangla,
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10.w),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w,
+                                      vertical: 2.h,
                                     ),
                                     decoration: BoxDecoration(
                                       color: HealoraColors.mist,
@@ -173,7 +174,7 @@ class SessionsScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8.w),
                                   HealoraStatusPill(
                                     label: session.statusLabel,
                                     type:
@@ -187,7 +188,7 @@ class SessionsScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4.h),
                               Text(
                                 '${session.hubName} · ${session.date} (${session.startTime} – ${session.endTime})',
                                 style: HealoraTypography.caption(
@@ -226,9 +227,9 @@ class SessionsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     const Divider(color: HealoraColors.line, height: 1),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Required Staffing & Equipment Checklist Chips
                     Row(
@@ -248,15 +249,15 @@ class SessionsScreen extends StatelessWidget {
                                   isBangla: state.isBangla,
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              SizedBox(height: 6.h),
                               Wrap(
                                 spacing: 8,
                                 runSpacing: 6,
                                 children: session.requiredRoles.map((role) {
                                   return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w,
+                                      vertical: 4.h,
                                     ),
                                     decoration: BoxDecoration(
                                       color: HealoraColors.okBg,
@@ -270,7 +271,7 @@ class SessionsScreen extends StatelessWidget {
                                           size: 12,
                                           color: HealoraColors.okFg,
                                         ),
-                                        const SizedBox(width: 4),
+                                        SizedBox(width: 4.w),
                                         Text(
                                           role,
                                           style: HealoraTypography.caption(
@@ -286,7 +287,7 @@ class SessionsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 24),
+                        SizedBox(width: 24.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,15 +302,15 @@ class SessionsScreen extends StatelessWidget {
                                   isBangla: state.isBangla,
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              SizedBox(height: 6.h),
                               Wrap(
                                 spacing: 8,
                                 runSpacing: 6,
                                 children: session.requiredEquipment.map((eq) {
                                   return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w,
+                                      vertical: 4.h,
                                     ),
                                     decoration: BoxDecoration(
                                       color: HealoraColors.mist,
@@ -323,7 +324,7 @@ class SessionsScreen extends StatelessWidget {
                                           size: 12,
                                           color: HealoraColors.teal,
                                         ),
-                                        const SizedBox(width: 4),
+                                        SizedBox(width: 4.w),
                                         Text(
                                           eq,
                                           style: HealoraTypography.caption(
@@ -342,7 +343,7 @@ class SessionsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Notes & Lead
                     Row(
@@ -352,7 +353,7 @@ class SessionsScreen extends StatelessWidget {
                           size: 16,
                           color: HealoraColors.slate,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Expanded(
                           child: Text(
                             session.notes,
@@ -397,7 +398,7 @@ class SessionsScreen extends StatelessWidget {
             style: HealoraTypography.h2(isBangla: state.isBangla),
           ),
           content: SizedBox(
-            width: 520,
+            width: 520.w,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,7 +408,7 @@ class SessionsScreen extends StatelessWidget {
                   hintText: 'e.g. Chronic Care Outreach Camp - Day 2',
                   isBangla: state.isBangla,
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Row(
                   children: [
                     Expanded(
@@ -417,7 +418,7 @@ class SessionsScreen extends StatelessWidget {
                         isBangla: state.isBangla,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: HealoraTextField(
                         label: state.t('Operating Hours', 'সময়সূচী'),
@@ -427,7 +428,7 @@ class SessionsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Row(
                   children: [
                     Expanded(
@@ -440,7 +441,7 @@ class SessionsScreen extends StatelessWidget {
                         isBangla: state.isBangla,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: HealoraTextField(
                         label: state.t(

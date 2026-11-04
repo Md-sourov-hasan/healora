@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_typography.dart';
@@ -16,7 +17,7 @@ class EquipmentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = controller.state;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,7 +34,7 @@ class EquipmentScreen extends StatelessWidget {
                     ),
                     style: HealoraTypography.h1(isBangla: state.isBangla),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Manage hub device calibration dates, maintenance history, station assignments, and clinical safety blocks.',
@@ -69,7 +70,7 @@ class EquipmentScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // PRD Clinical Safety Box (Section 8.9 & 13.1)
           HealoraCard.tint(
@@ -80,7 +81,7 @@ class EquipmentScreen extends StatelessWidget {
                   color: HealoraColors.teal,
                   size: 24,
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +97,7 @@ class EquipmentScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         state.t(
                           'The system strictly prevents an out-of-service or overdue device from being assigned to any session where that device is mandatory. Calibration logs are tied directly to observation attribution.',
@@ -114,14 +115,14 @@ class EquipmentScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // List of Equipment
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.equipment.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 14),
+            separatorBuilder: (_, __) => SizedBox(height: 14.h),
             itemBuilder: (context, idx) {
               final HubEquipment eq = state.equipment[idx];
 
@@ -142,8 +143,8 @@ class EquipmentScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: 44.w,
+                          height: 44.h,
                           decoration: BoxDecoration(
                             color: eq.status == EquipmentStatus.outOfService
                                 ? HealoraColors.badBg
@@ -157,7 +158,7 @@ class EquipmentScreen extends StatelessWidget {
                                 : HealoraColors.pine,
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,11 +172,11 @@ class EquipmentScreen extends StatelessWidget {
                                       isBangla: state.isBangla,
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10.w),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w,
+                                      vertical: 2.h,
                                     ),
                                     decoration: BoxDecoration(
                                       color: HealoraColors.bone,
@@ -193,14 +194,14 @@ class EquipmentScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8.w),
                                   HealoraStatusPill(
                                     label: eq.statusLabel,
                                     type: pillType,
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4.h),
                               Text(
                                 'Model: ${eq.model} · Serial: ${eq.serialNumber}',
                                 style: HealoraTypography.caption(
@@ -248,9 +249,9 @@ class EquipmentScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     const Divider(color: HealoraColors.line, height: 1),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     Row(
                       children: [
@@ -259,7 +260,7 @@ class EquipmentScreen extends StatelessWidget {
                           size: 16,
                           color: HealoraColors.okFg,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           '${state.t("Last Calibration:", "সর্বশেষ ক্যালিব্রেশন:")} ${eq.lastCalibration}',
                           style: HealoraTypography.caption(
@@ -267,13 +268,13 @@ class EquipmentScreen extends StatelessWidget {
                             isBangla: state.isBangla,
                           ),
                         ),
-                        const SizedBox(width: 20),
+                        SizedBox(width: 20.w),
                         const Icon(
                           Icons.event_repeat,
                           size: 16,
                           color: HealoraColors.warnFg,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           '${state.t("Next Due:", "পরবর্তী মেয়াদ:")} ${eq.nextCalibrationDue}',
                           style:

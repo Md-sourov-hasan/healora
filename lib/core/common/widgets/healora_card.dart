@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -72,7 +73,7 @@ class _HealoraCardState extends State<HealoraCard> {
   @override
   Widget build(BuildContext context) {
     final BorderRadius radius = widget.borderRadius ?? HealoraSpacing.borderCard;
-    final EdgeInsetsGeometry pad = widget.padding ?? const EdgeInsets.all(20);
+    final EdgeInsetsGeometry pad = widget.padding ?? EdgeInsets.all(20.r);
 
     Color bgColor;
     Border? border;
@@ -163,7 +164,7 @@ class HealoraStatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
         color: HealoraColors.paper,
         borderRadius: HealoraSpacing.borderTile,
@@ -190,7 +191,7 @@ class HealoraStatTile extends StatelessWidget {
               if (icon != null) icon!,
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             value,
             style: HealoraTypography.tabular(
@@ -200,7 +201,7 @@ class HealoraStatTile extends StatelessWidget {
             ),
           ),
           if (subtitle != null) ...[
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             Text(
               subtitle!,
               style: HealoraTypography.caption(

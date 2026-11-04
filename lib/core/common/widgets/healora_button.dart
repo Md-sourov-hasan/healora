@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -171,7 +172,7 @@ class _HealoraButtonState extends State<HealoraButton> {
     return Container(
       height: HealoraSpacing.primaryButtonHeight,
       width: widget.fullWidth ? double.infinity : widget.width,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: HealoraSpacing.borderControl,
@@ -180,19 +181,23 @@ class _HealoraButtonState extends State<HealoraButton> {
         mainAxisSize: widget.fullWidth ? MainAxisSize.max : MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            widget.label ?? '',
-            style: HealoraTypography.body(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              isBangla: widget.isBangla,
+          Expanded(
+            child: Text(
+              widget.label ?? '',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: HealoraTypography.body(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                isBangla: widget.isBangla,
+              ),
             ),
           ),
           if (widget.showArrowChip) ...[
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Container(
-              width: 32,
-              height: 32,
+              width: 32.w,
+              height: 32.h,
               decoration: const BoxDecoration(
                 color: Color(0x24FFFFFF), // white 14%
                 shape: BoxShape.circle,
@@ -215,7 +220,7 @@ class _HealoraButtonState extends State<HealoraButton> {
     return Container(
       height: HealoraSpacing.primaryButtonHeight,
       width: widget.fullWidth ? double.infinity : widget.width,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: HealoraSpacing.borderControl,
@@ -228,14 +233,18 @@ class _HealoraButtonState extends State<HealoraButton> {
           children: [
             if (widget.icon != null) ...[
               widget.icon!,
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
             ],
-            Text(
-              widget.label ?? '',
-              style: HealoraTypography.body(
-                color: HealoraColors.ink,
-                fontWeight: FontWeight.w600,
-                isBangla: widget.isBangla,
+            Flexible(
+              child: Text(
+                widget.label ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: HealoraTypography.body(
+                  color: HealoraColors.ink,
+                  fontWeight: FontWeight.w600,
+                  isBangla: widget.isBangla,
+                ),
               ),
             ),
           ],
@@ -248,8 +257,8 @@ class _HealoraButtonState extends State<HealoraButton> {
     final Color bgColor = _isHovered ? HealoraColors.mist : HealoraColors.paper;
 
     return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      height: 44.h,
+      padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: HealoraSpacing.borderControl,
@@ -261,14 +270,18 @@ class _HealoraButtonState extends State<HealoraButton> {
           children: [
             if (widget.icon != null) ...[
               widget.icon!,
-              const SizedBox(width: 6),
+              SizedBox(width: 6.w),
             ],
-            Text(
-              widget.label ?? '',
-              style: HealoraTypography.bodySmall(
-                color: HealoraColors.ink,
-                fontWeight: FontWeight.w600,
-                isBangla: widget.isBangla,
+            Flexible(
+              child: Text(
+                widget.label ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: HealoraTypography.bodySmall(
+                  color: HealoraColors.ink,
+                  fontWeight: FontWeight.w600,
+                  isBangla: widget.isBangla,
+                ),
               ),
             ),
           ],
@@ -281,8 +294,8 @@ class _HealoraButtonState extends State<HealoraButton> {
     final Color textColor = _isHovered ? HealoraColors.pine : HealoraColors.teal;
 
     return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 44.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Center(
         child: Text(
           widget.label ?? '',
@@ -300,8 +313,8 @@ class _HealoraButtonState extends State<HealoraButton> {
     final Color bgColor = _isHovered ? HealoraColors.mist : HealoraColors.paper;
 
     return Container(
-      width: 44,
-      height: 44,
+      width: 44.w,
+      height: 44.h,
       decoration: BoxDecoration(
         color: bgColor,
         shape: BoxShape.circle,
@@ -317,7 +330,7 @@ class _HealoraButtonState extends State<HealoraButton> {
     return Container(
       height: HealoraSpacing.primaryButtonHeight,
       width: widget.fullWidth ? double.infinity : widget.width,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
         color: HealoraColors.bad,
         borderRadius: HealoraSpacing.borderControl,

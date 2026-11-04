@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -16,7 +17,7 @@ class ReportsScreen extends StatelessWidget {
     final metrics = controller.metrics;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,7 +34,7 @@ class ReportsScreen extends StatelessWidget {
                     ),
                     style: HealoraTypography.h1(isBangla: state.isBangla),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Aggregated metrics on hub capacity utilisation, waiting duration, data completeness, and sync health.',
@@ -47,10 +48,7 @@ class ReportsScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: HealoraColors.paper,
                   borderRadius: HealoraSpacing.borderControl,
@@ -63,7 +61,7 @@ class ReportsScreen extends StatelessWidget {
                       size: 16,
                       color: HealoraColors.teal,
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6.w),
                     Text(
                       state.t(
                         'Refreshed: 09:50 AM BST',
@@ -80,7 +78,7 @@ class ReportsScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // PRD Section 8.11 Ethical Metrics Notice
           HealoraCard.tint(
@@ -91,7 +89,7 @@ class ReportsScreen extends StatelessWidget {
                   color: HealoraColors.teal,
                   size: 24,
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +105,7 @@ class ReportsScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         state.t(
                           'Healora strictly avoids individual staff leaderboards based solely on patient throughput, as speed-based incentives risk rushed measurements or skipped clinical steps. Aggregate process quality and protocol adherence are measured.',
@@ -125,7 +123,7 @@ class ReportsScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // KPI Grid
           LayoutBuilder(
@@ -248,7 +246,7 @@ class ReportsScreen extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // Regional Comparison Card
           Text(
@@ -258,7 +256,7 @@ class ReportsScreen extends StatelessWidget {
             ),
             style: HealoraTypography.h2(isBangla: state.isBangla),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           HealoraCard(
             child: Column(
@@ -271,7 +269,7 @@ class ReportsScreen extends StatelessWidget {
                   '100% Sync',
                   state.isBangla,
                 ),
-                const Divider(color: HealoraColors.line, height: 20),
+                Divider(color: HealoraColors.line, height: 20.h),
                 _buildReportRow(
                   'Nilphamari North Hub & Camp (HUB-NLP-02)',
                   'Rangpur Division',
@@ -280,7 +278,7 @@ class ReportsScreen extends StatelessWidget {
                   '99.1% Sync',
                   state.isBangla,
                 ),
-                const Divider(color: HealoraColors.line, height: 20),
+                Divider(color: HealoraColors.line, height: 20.h),
                 _buildReportRow(
                   'Cox\'s Bazar Coastal Care Hub (HUB-CXB-03)',
                   'Chattogram Division',
@@ -289,7 +287,7 @@ class ReportsScreen extends StatelessWidget {
                   '100% Sync',
                   state.isBangla,
                 ),
-                const Divider(color: HealoraColors.line, height: 20),
+                Divider(color: HealoraColors.line, height: 20.h),
                 _buildReportRow(
                   'Sylhet Sreemangal Tea Estate Hub (HUB-SYL-04)',
                   'Sylhet Division',
@@ -317,8 +315,8 @@ class ReportsScreen extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 36,
-          height: 36,
+          width: 36.w,
+          height: 36.h,
           decoration: BoxDecoration(
             color: HealoraColors.mist,
             borderRadius: BorderRadius.circular(10),
@@ -329,7 +327,7 @@ class ReportsScreen extends StatelessWidget {
             color: HealoraColors.pine,
           ),
         ),
-        const SizedBox(width: 14),
+        SizedBox(width: 14.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,7 +357,7 @@ class ReportsScreen extends StatelessWidget {
             isBangla: isBangla,
           ),
         ),
-        const SizedBox(width: 24),
+        SizedBox(width: 24.w),
         Text(
           wait,
           style: HealoraTypography.caption(
@@ -368,9 +366,9 @@ class ReportsScreen extends StatelessWidget {
             isBangla: isBangla,
           ),
         ),
-        const SizedBox(width: 24),
+        SizedBox(width: 24.w),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
           decoration: BoxDecoration(
             color: HealoraColors.okBg,
             borderRadius: BorderRadius.circular(6),

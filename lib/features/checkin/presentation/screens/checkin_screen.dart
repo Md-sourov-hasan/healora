@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -19,7 +20,7 @@ class CheckinScreen extends StatelessWidget {
     final state = controller.state;
     final filteredAppointments = controller.filteredAppointments;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,7 +37,7 @@ class CheckinScreen extends StatelessWidget {
                     ),
                     style: HealoraTypography.h1(isBangla: state.isBangla),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Search canonical booking records, capture consent, register walk-in patients, and issue queue tokens.',
@@ -60,7 +61,7 @@ class CheckinScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // PRD Privacy & Least Privilege Box (Section 6.1: Reception restricts raw vitals/diagnoses)
           HealoraCard.tint(
@@ -71,7 +72,7 @@ class CheckinScreen extends StatelessWidget {
                   color: HealoraColors.teal,
                   size: 24,
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +88,7 @@ class CheckinScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         state.t(
                           'Reception staff are permitted to verify patient identity, arrival time, and consent state. Clinical notes, diagnoses, prescriptions, and raw vitals are restricted to authorised clinical personnel only.',
@@ -105,7 +106,7 @@ class CheckinScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Search Box
           HealoraSearchBar(
@@ -118,7 +119,7 @@ class CheckinScreen extends StatelessWidget {
             isBangla: state.isBangla,
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Today's Booked Roster
           Text(
@@ -128,13 +129,13 @@ class CheckinScreen extends StatelessWidget {
             ),
             style: HealoraTypography.h2(isBangla: state.isBangla),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: filteredAppointments.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, __) => SizedBox(height: 12.h),
             itemBuilder: (context, idx) {
               final Appointment appt = filteredAppointments[idx];
               final bool isCheckedIn =
@@ -147,10 +148,10 @@ class CheckinScreen extends StatelessWidget {
                   children: [
                     // Slot Time Container
                     Container(
-                      width: 100,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 12,
+                      width: 100.w,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 12.h,
                       ),
                       decoration: BoxDecoration(
                         color: HealoraColors.bone,
@@ -165,7 +166,7 @@ class CheckinScreen extends StatelessWidget {
                             size: 16,
                             color: HealoraColors.teal,
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             appt.slotTime,
                             textAlign: TextAlign.center,
@@ -179,7 +180,7 @@ class CheckinScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
 
                     // Patient Details
                     Expanded(
@@ -195,11 +196,11 @@ class CheckinScreen extends StatelessWidget {
                                   isBangla: state.isBangla,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.w,
+                                  vertical: 2.h,
                                 ),
                                 decoration: BoxDecoration(
                                   color: HealoraColors.mist,
@@ -213,7 +214,7 @@ class CheckinScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               HealoraStatusPill(
                                 label: appt.statusLabel,
                                 type: isCheckedIn
@@ -222,7 +223,7 @@ class CheckinScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             '${appt.patientAge} ${state.t("yrs", "বছর")}, ${appt.patientGender} · ${appt.patientPhone} · ${appt.sessionTitle}',
                             style: HealoraTypography.caption(
@@ -230,7 +231,7 @@ class CheckinScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                           Text(
                             '${state.t("Source:", "উৎস:")} ${appt.bookingSource == "patient_app" ? "Patient App (Self-booked)" : (appt.bookingSource == "walk_in" ? "Assisted Walk-in" : "Referral")}',
                             style: HealoraTypography.micro(
@@ -267,9 +268,9 @@ class CheckinScreen extends StatelessWidget {
                       ),
                     ] else ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 8.h,
                         ),
                         decoration: BoxDecoration(
                           color: HealoraColors.okBg,
@@ -282,7 +283,7 @@ class CheckinScreen extends StatelessWidget {
                               size: 18,
                               color: HealoraColors.okFg,
                             ),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6.w),
                             Text(
                               state.t(
                                 'In Hub Workflow',
@@ -328,7 +329,7 @@ class CheckinScreen extends StatelessWidget {
                 ),
               ),
               content: SizedBox(
-                width: 480,
+                width: 480.w,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,7 +343,7 @@ class CheckinScreen extends StatelessWidget {
                       hintText: 'e.g. Joynal Abedin',
                       isBangla: controller.state.isBangla,
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Row(
                       children: [
                         Expanded(
@@ -357,7 +358,7 @@ class CheckinScreen extends StatelessWidget {
                             isBangla: controller.state.isBangla,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           flex: 1,
                           child: HealoraTextField(
@@ -369,7 +370,7 @@ class CheckinScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     // Gender Selector
                     Text(
@@ -379,12 +380,12 @@ class CheckinScreen extends StatelessWidget {
                         isBangla: controller.state.isBangla,
                       ).copyWith(fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Row(
                       children: ['Female', 'Male', 'Other'].map((g) {
                         final bool isSel = controller.walkInGender == g;
                         return Padding(
-                          padding: const EdgeInsets.only(right: 8),
+                          padding: EdgeInsets.only(right: 8.w),
                           child: ChoiceChip(
                             label: Text(g),
                             selected: isSel,
@@ -401,11 +402,11 @@ class CheckinScreen extends StatelessWidget {
                       }).toList(),
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // PDPA 2026 Consent Checkbox
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12.r),
                       decoration: BoxDecoration(
                         color: HealoraColors.mist,
                         borderRadius: HealoraSpacing.borderControl,
@@ -420,7 +421,7 @@ class CheckinScreen extends StatelessWidget {
                               () => controller.setWalkInConsent(v ?? false),
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Text(
                               controller.state.t(

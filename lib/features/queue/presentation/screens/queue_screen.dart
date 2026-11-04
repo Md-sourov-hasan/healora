@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -19,7 +20,7 @@ class QueueScreen extends StatelessWidget {
     final state = controller.state;
     final filteredQueue = controller.filteredQueue;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,9 +45,9 @@ class QueueScreen extends StatelessWidget {
                           style: HealoraTypography.h1(isBangla: state.isBangla),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 4.h,
                           ),
                           decoration: BoxDecoration(
                             color: HealoraColors.okBg,
@@ -56,14 +57,14 @@ class QueueScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                width: 8,
-                                height: 8,
+                                width: 8.w,
+                                height: 8.h,
                                 decoration: const BoxDecoration(
                                   color: HealoraColors.okFg,
                                   shape: BoxShape.circle,
                                 ),
                               ),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6.w),
                               Text(
                                 state.t(
                                   'LIVE SYNC ACTIVE',
@@ -79,7 +80,7 @@ class QueueScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       state.t(
                         'Real-time token management across registration, measurement stations, and doctor consultation.',
@@ -101,9 +102,9 @@ class QueueScreen extends StatelessWidget {
                       controller.togglePublicDisplayMode();
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
                       ),
                       decoration: BoxDecoration(
                         color: controller.isPublicDisplayMode
@@ -124,7 +125,7 @@ class QueueScreen extends StatelessWidget {
                                 ? Colors.white
                                 : HealoraColors.slate,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           Text(
                             state.t(
                               controller.isPublicDisplayMode
@@ -150,7 +151,7 @@ class QueueScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Station Queues Summary (4 Stations at Manikganj Hub)
           LayoutBuilder(
@@ -165,7 +166,7 @@ class QueueScreen extends StatelessWidget {
                   crossAxisCount: count,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 1.8,
+                  childAspectRatio: 1.5,
                 ),
                 itemCount: state.stations.length,
                 itemBuilder: (context, index) {
@@ -201,8 +202,8 @@ class QueueScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              width: 8,
-                              height: 8,
+                              width: 8.w,
+                              height: 8.h,
                               decoration: BoxDecoration(
                                 color: station.status == StationStatus.available
                                     ? HealoraColors.okFg
@@ -242,13 +243,17 @@ class QueueScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Text(
-                              controller.stationLead(station.assignedStaff),
-                              style: HealoraTypography.micro(
-                                color: isFiltered
-                                    ? Colors.white70
-                                    : HealoraColors.slate,
-                                isBangla: state.isBangla,
+                            Flexible(
+                              child: Text(
+                                controller.stationLead(station.assignedStaff),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: HealoraTypography.micro(
+                                  color: isFiltered
+                                      ? Colors.white70
+                                      : HealoraColors.slate,
+                                  isBangla: state.isBangla,
+                                ),
                               ),
                             ),
                           ],
@@ -261,7 +266,7 @@ class QueueScreen extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // Live Queue Table / Cards
           Text(
@@ -276,13 +281,13 @@ class QueueScreen extends StatelessWidget {
                   ),
             style: HealoraTypography.h2(isBangla: state.isBangla),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           if (filteredQueue.isEmpty) ...[
             HealoraCard.tint(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(24.r),
                   child: Column(
                     children: [
                       const Icon(
@@ -290,7 +295,7 @@ class QueueScreen extends StatelessWidget {
                         color: HealoraColors.okFg,
                         size: 36,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       Text(
                         state.t(
                           'No waiting patients at this station',
@@ -311,7 +316,7 @@ class QueueScreen extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: filteredQueue.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => SizedBox(height: 12.h),
               itemBuilder: (context, idx) {
                 final QueueTicket tkt = filteredQueue[idx];
 
@@ -320,10 +325,10 @@ class QueueScreen extends StatelessWidget {
                     children: [
                       // Token Badge (Large high contrast)
                       Container(
-                        width: 140,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 12,
+                        width: 140.w,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 12.h,
                         ),
                         decoration: BoxDecoration(
                           color: tkt.status == QueueStatus.inService
@@ -343,7 +348,7 @@ class QueueScreen extends StatelessWidget {
                                 isBangla: state.isBangla,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                             Text(
                               tkt.tokenNumber,
                               style: HealoraTypography.tabular(
@@ -358,7 +363,7 @@ class QueueScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(width: 20),
+                      SizedBox(width: 20.w),
 
                       // Patient & Station Info
                       Expanded(
@@ -374,7 +379,7 @@ class QueueScreen extends StatelessWidget {
                                     isBangla: state.isBangla,
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 if (!controller.isPublicDisplayMode)
                                   Text(
                                     '(${tkt.patientCode})',
@@ -383,7 +388,7 @@ class QueueScreen extends StatelessWidget {
                                       isBangla: state.isBangla,
                                     ),
                                   ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10.w),
                                 HealoraStatusPill(
                                   label: tkt.statusLabel,
                                   type: tkt.status == QueueStatus.inService
@@ -394,7 +399,7 @@ class QueueScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Text(
                               '${tkt.currentStationName} · ${state.t("Assigned to:", "দায়িত্বে:")} ${tkt.assignedWorker ?? "Pending"}',
                               style: HealoraTypography.caption(
@@ -403,7 +408,7 @@ class QueueScreen extends StatelessWidget {
                               ),
                             ),
                             if (tkt.delayReason != null) ...[
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4.h),
                               Row(
                                 children: [
                                   const Icon(
@@ -411,7 +416,7 @@ class QueueScreen extends StatelessWidget {
                                     size: 14,
                                     color: HealoraColors.warnFg,
                                   ),
-                                  const SizedBox(width: 4),
+                                  SizedBox(width: 4.w),
                                   Text(
                                     '${state.t("Delay note:", "বিলম্ব নোট:")} ${tkt.delayReason}',
                                     style: HealoraTypography.micro(
@@ -437,7 +442,7 @@ class QueueScreen extends StatelessWidget {
                                 size: 16,
                                 color: HealoraColors.slate,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4.w),
                               Text(
                                 '${tkt.waitDurationMinutes} min',
                                 style: HealoraTypography.tabular(
@@ -460,7 +465,7 @@ class QueueScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(width: 20),
+                      SizedBox(width: 20.w),
 
                       // Actions
                       if (!controller.isPublicDisplayMode)

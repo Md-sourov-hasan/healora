@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -19,7 +20,7 @@ class HubsScreen extends StatelessWidget {
     final state = controller.state;
     final filteredHubs = controller.filteredHubs;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,7 +37,7 @@ class HubsScreen extends StatelessWidget {
                     ),
                     style: HealoraTypography.h1(isBangla: state.isBangla),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Area-based physical service points operating in rural & peri-urban Bangladesh.',
@@ -57,7 +58,7 @@ class HubsScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // Search and Filters
           Row(
@@ -77,11 +78,11 @@ class HubsScreen extends StatelessWidget {
                   isBangla: state.isBangla,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               // Division filter chip
               Container(
-                height: 56,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                height: 56.h,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
                   color: HealoraColors.paper,
                   borderRadius: HealoraSpacing.borderControl,
@@ -128,14 +129,14 @@ class HubsScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Hub Cards Grid / List
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: filteredHubs.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            separatorBuilder: (_, __) => SizedBox(height: 16.h),
             itemBuilder: (context, idx) {
               final Hub hub = filteredHubs[idx];
               final bool isCurrentlySelected = hub.id == state.selectedHubId;
@@ -149,8 +150,8 @@ class HubsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 48,
-                          height: 48,
+                          width: 48.w,
+                          height: 48.h,
                           decoration: BoxDecoration(
                             color: isCurrentlySelected
                                 ? HealoraColors.ink
@@ -165,7 +166,7 @@ class HubsScreen extends StatelessWidget {
                             size: 26,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,11 +180,11 @@ class HubsScreen extends StatelessWidget {
                                       color: HealoraColors.ink,
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10.w),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 3,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w,
+                                      vertical: 3.h,
                                     ),
                                     decoration: BoxDecoration(
                                       color: HealoraColors.mist,
@@ -197,7 +198,7 @@ class HubsScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8.w),
                                   HealoraStatusPill(
                                     label: hub.statusLabel,
                                     type: hub.status == HubStatus.active
@@ -206,7 +207,7 @@ class HubsScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4.h),
                               Text(
                                 '${hub.address} · ${hub.upazila}, ${hub.district}, ${hub.division}',
                                 style: HealoraTypography.caption(
@@ -241,9 +242,9 @@ class HubsScreen extends StatelessWidget {
                           )
                         else
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
                             ),
                             decoration: BoxDecoration(
                               color: HealoraColors.okBg,
@@ -256,7 +257,7 @@ class HubsScreen extends StatelessWidget {
                                   size: 14,
                                   color: HealoraColors.okFg,
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6.w),
                                 Text(
                                   state.t('Active Selection', 'সক্রিয় হাব'),
                                   style: HealoraTypography.caption(
@@ -270,9 +271,9 @@ class HubsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     const Divider(color: HealoraColors.line, height: 1),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Hub Meta Info Grid
                     Wrap(
@@ -310,7 +311,7 @@ class HubsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Supported services chips
                     Text(
@@ -323,15 +324,15 @@ class HubsScreen extends StatelessWidget {
                         isBangla: state.isBangla,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: hub.supportedServices.map((service) {
                         return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 6.h,
                           ),
                           decoration: BoxDecoration(
                             color: HealoraColors.mist,
@@ -373,7 +374,7 @@ class HubsScreen extends StatelessWidget {
           size: 16,
           color: highlight ? HealoraColors.clay : HealoraColors.slate,
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -414,7 +415,7 @@ class HubsScreen extends StatelessWidget {
             style: HealoraTypography.h2(isBangla: controller.state.isBangla),
           ),
           content: SizedBox(
-            width: 480,
+            width: 480.w,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,7 +430,7 @@ class HubsScreen extends StatelessWidget {
                     isBangla: controller.state.isBangla,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 HealoraTextField(
                   label: controller.state.t(
                     'Hub Official Name',
@@ -438,7 +439,7 @@ class HubsScreen extends StatelessWidget {
                   hintText: 'e.g. Bogura Rural Care Hub',
                   isBangla: controller.state.isBangla,
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 HealoraTextField(
                   label: controller.state.t(
                     'Catchment Upazila & Unions',
@@ -447,7 +448,7 @@ class HubsScreen extends StatelessWidget {
                   hintText: 'e.g. Shibganj Sadar & Buriganj',
                   isBangla: controller.state.isBangla,
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 HealoraTextField(
                   label: controller.state.t(
                     'Nearest Referral Hospital (Emergency SOP)',
