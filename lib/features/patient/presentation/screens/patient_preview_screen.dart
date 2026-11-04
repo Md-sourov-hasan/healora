@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -23,10 +24,10 @@ class PatientPreviewScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: HealoraColors.bone,
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: HealoraColors.line, width: 2),
+          border: Border.all(color: HealoraColors.line, width: 2.w),
           boxShadow: HealoraColors.floatShadow,
         ),
-        margin: const EdgeInsets.symmetric(vertical: 20),
+        margin: EdgeInsets.symmetric(vertical: 20.h),
         clipBehavior: Clip.antiAlias,
         child: SingleChildScrollView(
           child: Column(
@@ -34,8 +35,8 @@ class PatientPreviewScreen extends StatelessWidget {
             children: [
               // Top Safe Area & Dynamic Island / Status Bar simulator
               Container(
-                height: 48,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                height: 48.h,
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 color: const Color(0xFFD7E6E0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,20 +49,20 @@ class PatientPreviewScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: 100,
-                      height: 24,
+                      width: 100.w,
+                      height: 24.h,
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.signal_cellular_alt, size: 14),
-                        SizedBox(width: 4),
-                        Icon(Icons.wifi, size: 14),
-                        SizedBox(width: 4),
-                        Icon(Icons.battery_full, size: 16),
+                        const Icon(Icons.signal_cellular_alt, size: 14),
+                        SizedBox(width: 4.w),
+                        const Icon(Icons.wifi, size: 14),
+                        SizedBox(width: 4.w),
+                        const Icon(Icons.battery_full, size: 16),
                       ],
                     ),
                   ],
@@ -73,9 +74,9 @@ class PatientPreviewScreen extends StatelessWidget {
                 decoration: const BoxDecoration(
                   gradient: HealoraColors.washGradient,
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 16.h,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,8 +85,8 @@ class PatientPreviewScreen extends StatelessWidget {
                       children: [
                         // Avatar: RB (Rahima Begum)
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: 44.w,
+                          height: 44.h,
                           decoration: const BoxDecoration(
                             color: HealoraColors.sage200,
                             shape: BoxShape.circle,
@@ -100,7 +101,7 @@ class PatientPreviewScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,8 +134,8 @@ class PatientPreviewScreen extends StatelessWidget {
                           clipBehavior: Clip.none,
                           children: [
                             Container(
-                              width: 40,
-                              height: 40,
+                              width: 40.w,
+                              height: 40.h,
                               decoration: BoxDecoration(
                                 color: HealoraColors.paper,
                                 shape: BoxShape.circle,
@@ -152,8 +153,8 @@ class PatientPreviewScreen extends StatelessWidget {
                               top: -2,
                               right: -2,
                               child: Container(
-                                width: 16,
-                                height: 16,
+                                width: 16.w,
+                                height: 16.h,
                                 decoration: const BoxDecoration(
                                   color: HealoraColors.clay,
                                   shape: BoxShape.circle,
@@ -175,7 +176,7 @@ class PatientPreviewScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Search with Voice Bar (Chapter 7.3)
                     HealoraSearchBar(
@@ -191,9 +192,9 @@ class PatientPreviewScreen extends StatelessWidget {
               ),
 
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 12.h,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,13 +223,13 @@ class PatientPreviewScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 44,
-                                height: 44,
+                                width: 44.w,
+                                height: 44.h,
                                 decoration: BoxDecoration(
                                   color: HealoraColors.mist,
                                   borderRadius: BorderRadius.circular(12),
@@ -238,7 +239,7 @@ class PatientPreviewScreen extends StatelessWidget {
                                   color: HealoraColors.teal,
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,9 +263,9 @@ class PatientPreviewScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: EdgeInsets.all(10.r),
                             decoration: BoxDecoration(
                               color: HealoraColors.bone,
                               borderRadius: HealoraSpacing.borderControl,
@@ -276,7 +277,7 @@ class PatientPreviewScreen extends StatelessWidget {
                                   size: 16,
                                   color: HealoraColors.teal,
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Expanded(
                                   child: Text(
                                     state.t(
@@ -294,7 +295,7 @@ class PatientPreviewScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           Row(
                             children: [
                               Expanded(
@@ -305,7 +306,7 @@ class PatientPreviewScreen extends StatelessWidget {
                                   isBangla: state.isBangla,
                                 ),
                               ),
-                              const SizedBox(width: 10),
+                              SizedBox(width: 10.w),
                               HealoraButton.small(
                                 label: state.t('Reschedule', 'সময় বদলান'),
                                 onPressed: () {},
@@ -317,7 +318,7 @@ class PatientPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // HERO ACTION CARD (Design System Chapter 7.7)
                     HealoraCard.hero(
@@ -325,9 +326,9 @@ class PatientPreviewScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10.w,
+                              vertical: 4.h,
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0x24FFFFFF),
@@ -341,7 +342,7 @@ class PatientPreviewScreen extends StatelessWidget {
                                   size: 12,
                                   color: Colors.white,
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4.w),
                                 Text(
                                   state.t(
                                     'Free to compare',
@@ -355,7 +356,7 @@ class PatientPreviewScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           Text(
                             state.t(
                               'Know the cost before you travel',
@@ -366,7 +367,7 @@ class PatientPreviewScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 6.h),
                           Text(
                             state.t(
                               'Real quotes from 5 or 48 hospitals: cost, stay and recovery time.',
@@ -377,7 +378,7 @@ class PatientPreviewScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           // Price in Clay format (Chapter 03)
                           Text(
                             '\$4,200–\$5,600',
@@ -393,7 +394,7 @@ class PatientPreviewScreen extends StatelessWidget {
                               isBangla: true,
                             ),
                           ),
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14.h),
                           HealoraButton.secondary(
                             fullWidth: true,
                             label: state.t('Get quote', 'কোটেশন পান'),
@@ -404,11 +405,11 @@ class PatientPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Segmented Control (Appointments / Quotes / Prescriptions / Orders)
                     Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: EdgeInsets.all(4.r),
                       decoration: BoxDecoration(
                         color: const Color(0xFFEAE8E1),
                         borderRadius: HealoraSpacing.borderControl,
@@ -422,7 +423,7 @@ class PatientPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // VERIFIED HUB VITALS CARD (Shows results uploaded from hub encounter!)
                     HealoraCard(
@@ -445,7 +446,7 @@ class PatientPreviewScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               HealoraStatusPill(
                                 label: state.t(
                                   'Verified at Hub',
@@ -455,7 +456,7 @@ class PatientPreviewScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10.h),
                           Text(
                             'Manikganj Rural Care Hub · 4 Nov 2026',
                             style: HealoraTypography.h3(
@@ -470,9 +471,9 @@ class PatientPreviewScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14.h),
                           const Divider(color: HealoraColors.line, height: 1),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
 
                           // Vitals Grid
                           Row(
@@ -485,11 +486,11 @@ class PatientPreviewScreen extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14.h),
 
                           // Doctor signed follow-up instructions
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: EdgeInsets.all(12.r),
                             decoration: BoxDecoration(
                               color: HealoraColors.mist,
                               borderRadius: HealoraSpacing.borderControl,
@@ -502,7 +503,7 @@ class PatientPreviewScreen extends StatelessWidget {
                                   color: HealoraColors.okFg,
                                   size: 18,
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Expanded(
                                   child: Text(
                                     state.t(
@@ -522,7 +523,7 @@ class PatientPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
                   ],
                 ),
               ),
@@ -539,7 +540,7 @@ class PatientPreviewScreen extends StatelessWidget {
       child: GestureDetector(
         onTap: () => controller.selectSection(index),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8.h),
           decoration: BoxDecoration(
             color: isSel ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
@@ -582,7 +583,7 @@ class PatientPreviewScreen extends StatelessWidget {
             isBangla: controller.state.isBangla,
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2.h),
         Text(
           value,
           style: HealoraTypography.tabular(

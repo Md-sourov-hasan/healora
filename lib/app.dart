@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:healora/core/controllers/healora_state.dart';
 import 'package:healora/core/theme/healora_theme.dart';
@@ -20,17 +21,22 @@ class _HealoraAppState extends State<HealoraApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HealoraState>(
-      init: _state,
-      builder: (state) {
-        return GetMaterialApp(
-          navigatorKey: navigatorKey,
-          title: 'Healora · Hub Management & Clinical Care Platform',
-          debugShowCheckedModeBanner: false,
-          theme: HealoraTheme.lightTheme,
-          home: HealoraShell(state: state),
-        );
-      },
+    return ScreenUtilInit(
+      designSize: const Size(1440, 900),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => GetBuilder<HealoraState>(
+        init: _state,
+        builder: (state) {
+          return GetMaterialApp(
+            navigatorKey: navigatorKey,
+            title: 'Healora · Hub Management & Clinical Care Platform',
+            debugShowCheckedModeBanner: false,
+            theme: HealoraTheme.lightTheme,
+            home: HealoraShell(state: state),
+          );
+        },
+      ),
     );
   }
 }
@@ -61,9 +67,9 @@ class HealoraShell extends StatelessWidget {
               // Offline notification bar (Pinned under header when offline, Chapter 7.9)
               if (state.isOffline)
                 Container(
-                  height: 36,
+                  height: 36.h,
                   color: HealoraColors.warnBg,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Row(
                     children: [
                       const Icon(
@@ -71,7 +77,7 @@ class HealoraShell extends StatelessWidget {
                         size: 16,
                         color: HealoraColors.warnFg,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         state.t(
                           'You\'re offline. Rural Mode active. Local data is encrypted; changes will auto-sync upon reconnection.',

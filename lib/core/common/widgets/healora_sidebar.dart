@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -95,13 +96,13 @@ class HealoraSidebar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           // Navigation items list
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               itemCount: navItems.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 4),
+              separatorBuilder: (_, __) => SizedBox(height: 4.h),
               itemBuilder: (context, index) {
                 final NavItem item = navItems[index];
                 final bool isSelected = state.currentNavIndex == index;
@@ -113,7 +114,7 @@ class HealoraSidebar extends StatelessWidget {
                       onTap: () => state.setNavIndex(index),
                       borderRadius: HealoraSpacing.borderControl,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
                           color: isSelected ? HealoraColors.ink : Colors.transparent,
                           borderRadius: HealoraSpacing.borderControl,
@@ -126,7 +127,7 @@ class HealoraSidebar extends StatelessWidget {
                               size: 22,
                               color: isSelected ? Colors.white : HealoraColors.slate,
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Text(
                               state.t(item.titleEn, item.titleBn),
                               maxLines: 1,
@@ -148,8 +149,8 @@ class HealoraSidebar extends StatelessWidget {
                   onTap: () => state.setNavIndex(index),
                   borderRadius: HealoraSpacing.borderControl,
                   child: Container(
-                    height: 44,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    height: 44.h,
+                    padding: EdgeInsets.symmetric(horizontal: 14.w),
                     decoration: BoxDecoration(
                       color: isSelected ? HealoraColors.ink : Colors.transparent,
                       borderRadius: HealoraSpacing.borderControl,
@@ -161,7 +162,7 @@ class HealoraSidebar extends StatelessWidget {
                           size: 20,
                           color: isSelected ? Colors.white : HealoraColors.slate,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: Text(
                             state.t(item.titleEn, item.titleBn),
@@ -174,8 +175,8 @@ class HealoraSidebar extends StatelessWidget {
                         ),
                         if (isSelected)
                           Container(
-                            width: 6,
-                            height: 6,
+                            width: 6.w,
+                            height: 6.h,
                             decoration: const BoxDecoration(
                               color: HealoraColors.teal,
                               shape: BoxShape.circle,
@@ -192,8 +193,8 @@ class HealoraSidebar extends StatelessWidget {
           // Bottom card: Hub Operations indicator
           if (!isTablet) ...[
             Container(
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.all(14),
+              margin: EdgeInsets.all(12.r),
+              padding: EdgeInsets.all(14.r),
               decoration: BoxDecoration(
                 color: HealoraColors.mist,
                 borderRadius: HealoraSpacing.borderControl,
@@ -206,14 +207,14 @@ class HealoraSidebar extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        width: 8,
-                        height: 8,
+                        width: 8.w,
+                        height: 8.h,
                         decoration: const BoxDecoration(
                           color: HealoraColors.ok,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
                           state.t('DHAKA SERVER REGION', 'ঢাকা সার্ভার রিজিয়ন'),
@@ -227,7 +228,7 @@ class HealoraSidebar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                   Text(
                     state.t('PDPA 2026 In-Country Residency Verified', 'ব্যক্তিগত তথ্য সুরক্ষা আইন ২০২৬ অনুসারী'),
                     style: HealoraTypography.micro(
@@ -277,8 +278,8 @@ class HealoraFloatingTabBar extends StatelessWidget {
             GestureDetector(
               onTap: () => state.setNavIndex(5),
               child: Container(
-                width: 52,
-                height: 52,
+                width: 52.w,
+                height: 52.h,
                 decoration: BoxDecoration(
                   color: HealoraColors.ink,
                   shape: BoxShape.circle,
@@ -305,7 +306,7 @@ class HealoraFloatingTabBar extends StatelessWidget {
       onTap: () => state.setNavIndex(index),
       borderRadius: BorderRadius.circular(16),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -314,7 +315,7 @@ class HealoraFloatingTabBar extends StatelessWidget {
               size: 22,
               color: isSelected ? HealoraColors.ink : HealoraColors.slate,
             ),
-            const SizedBox(height: 2),
+            SizedBox(height: 2.h),
             Text(
               state.t(labelEn, labelBn),
               style: HealoraTypography.micro(

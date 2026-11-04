@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -15,7 +16,7 @@ class AuditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = controller.state;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,7 +33,7 @@ class AuditScreen extends StatelessWidget {
                     ),
                     style: HealoraTypography.h1(isBangla: state.isBangla),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     state.t(
                       'Immutable cryptographic event trail aligned with Bangladesh Personal Data Protection Act 2026 & DGHS Directives.',
@@ -46,9 +47,9 @@ class AuditScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 6.h,
                 ),
                 decoration: BoxDecoration(
                   color: HealoraColors.okBg,
@@ -61,7 +62,7 @@ class AuditScreen extends StatelessWidget {
                       size: 16,
                       color: HealoraColors.okFg,
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6.w),
                     Text(
                       'APPEND-ONLY VERIFIED',
                       style: HealoraTypography.label(
@@ -75,7 +76,7 @@ class AuditScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // Bangladesh Regulatory Gates Overview (PRD Section 17)
           LayoutBuilder(
@@ -101,7 +102,7 @@ class AuditScreen extends StatelessWidget {
                             isBangla: state.isBangla,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           state.t(
                             'Health data treated as sensitive personal data. Specific informed consent verified for each physical encounter.',
@@ -127,7 +128,7 @@ class AuditScreen extends StatelessWidget {
                             isBangla: state.isBangla,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           state.t(
                             'Local Bangladesh data residency enforced. Overseas specialist sharing restricted to explicit teleconsultations.',
@@ -153,7 +154,7 @@ class AuditScreen extends StatelessWidget {
                             isBangla: state.isBangla,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           state.t(
                             'Doctor identity & BMDC registration verified. Health workers operate strictly under permitted scope.',
@@ -172,7 +173,7 @@ class AuditScreen extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // Audit Entries List
           Text(
@@ -182,13 +183,13 @@ class AuditScreen extends StatelessWidget {
             ),
             style: HealoraTypography.h2(isBangla: state.isBangla),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.auditLogs.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, __) => SizedBox(height: 12.h),
             itemBuilder: (context, idx) {
               final AuditLogEntry log = state.auditLogs[idx];
 
@@ -197,8 +198,8 @@ class AuditScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 40.w,
+                      height: 40.h,
                       decoration: BoxDecoration(
                         color: HealoraColors.bone,
                         borderRadius: BorderRadius.circular(10),
@@ -212,7 +213,7 @@ class AuditScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,9 +221,9 @@ class AuditScreen extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.w,
+                                  vertical: 2.h,
                                 ),
                                 decoration: BoxDecoration(
                                   color: HealoraColors.mist,
@@ -236,7 +237,7 @@ class AuditScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               Text(
                                 '${log.actorName} (${log.actorRole})',
                                 style: HealoraTypography.caption(
@@ -256,7 +257,7 @@ class AuditScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 6.h),
                           Text(
                             log.details,
                             style: HealoraTypography.bodySmall(
@@ -264,7 +265,7 @@ class AuditScreen extends StatelessWidget {
                               isBangla: state.isBangla,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 6.h),
                           Row(
                             children: [
                               const Icon(
@@ -272,7 +273,7 @@ class AuditScreen extends StatelessWidget {
                                 size: 14,
                                 color: HealoraColors.teal,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4.w),
                               Text(
                                 log.complianceStandard,
                                 style: HealoraTypography.micro(
@@ -280,7 +281,7 @@ class AuditScreen extends StatelessWidget {
                                   isBangla: state.isBangla,
                                 ).copyWith(fontWeight: FontWeight.w600),
                               ),
-                              const SizedBox(width: 16),
+                              SizedBox(width: 16.w),
                               Text(
                                 '${state.t("Hub:", "হাব:")} ${log.hubName}',
                                 style: HealoraTypography.micro(

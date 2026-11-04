@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -20,13 +21,13 @@ class DashboardScreen extends StatelessWidget {
     final currentHub = controller.currentHub;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header banner with Organic Wash or Hero style
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24.r),
             decoration: BoxDecoration(
               gradient: HealoraColors.washGradient,
               borderRadius: HealoraSpacing.borderCard,
@@ -48,7 +49,7 @@ class DashboardScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       Text(
                         state.t(
                           currentHub.name,
@@ -59,7 +60,7 @@ class DashboardScreen extends StatelessWidget {
                           color: HealoraColors.pine,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6.h),
                       Text(
                         state.t(
                           'Catchment: ${currentHub.catchmentArea} · Hours: ${currentHub.operatingHours}',
@@ -83,7 +84,7 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Operational Stat Tiles (Section 7.6: "Stat tiles are 3-up, r18, flat.")
           LayoutBuilder(
@@ -180,7 +181,7 @@ class DashboardScreen extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Operational Action Shortcuts
           Wrap(
@@ -229,7 +230,7 @@ class DashboardScreen extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // Today's Operating Sessions Section
           Row(
@@ -249,13 +250,13 @@ class DashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.sessions.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, __) => SizedBox(height: 12.h),
             itemBuilder: (context, idx) {
               final HubSession session = state.sessions[idx];
               final double fillRatio = session.totalCapacity > 0
@@ -274,8 +275,8 @@ class DashboardScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: 44.w,
+                          height: 44.h,
                           decoration: BoxDecoration(
                             color: session.sessionType == 'Special Camp'
                                 ? HealoraColors.mist
@@ -289,7 +290,7 @@ class DashboardScreen extends StatelessWidget {
                             color: HealoraColors.pine,
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,7 +320,7 @@ class DashboardScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4.h),
                               Text(
                                 '${session.hubName} · ${session.startTime} – ${session.endTime}',
                                 style: HealoraTypography.caption(
@@ -353,7 +354,7 @@ class DashboardScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
 
                     // Capacity Progress Bar (Chapter 7.5: 4px step bar)
                     ClipRRect(
@@ -370,7 +371,7 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     Row(
                       children: [
@@ -382,7 +383,7 @@ class DashboardScreen extends StatelessWidget {
                                 size: 16,
                                 color: HealoraColors.slate,
                               ),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6.w),
                               Expanded(
                                 child: Text(
                                   '${state.t("Lead:", "দায়িত্বপ্রাপ্ত:")} ${session.assignedLead}',
@@ -397,7 +398,7 @@ class DashboardScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Text(
                           '${session.bookedCount} ${state.t("Booked", "বুকড")} · ${session.walkInCurrent} ${state.t("Walk-ins", "ওয়াক-ইন")}',
                           style: HealoraTypography.caption(
@@ -413,15 +414,15 @@ class DashboardScreen extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // Operational Governance & Bangladesh Compliance Banner
           HealoraCard.tint(
             child: Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: 44.w,
+                  height: 44.h,
                   decoration: const BoxDecoration(
                     color: HealoraColors.sage200,
                     shape: BoxShape.circle,
@@ -432,7 +433,7 @@ class DashboardScreen extends StatelessWidget {
                     size: 22,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,7 +449,7 @@ class DashboardScreen extends StatelessWidget {
                           isBangla: state.isBangla,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(
                         state.t(
                           'Patient measurements are attested via BMDC-compliant health worker profiles and encrypted at rest. Data resides exclusively in Bangladesh per DGHS 2026 Telehealth Directives.',

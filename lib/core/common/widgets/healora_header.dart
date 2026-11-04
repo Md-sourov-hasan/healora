@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
@@ -17,7 +18,7 @@ class HealoraHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 72,
+      height: 72.h,
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? HealoraSpacing.space10 : HealoraSpacing.space5,
       ),
@@ -35,8 +36,8 @@ class HealoraHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: 36.w,
+                height: 36.h,
                 decoration: BoxDecoration(
                   color: HealoraColors.teal,
                   borderRadius: BorderRadius.circular(10),
@@ -49,7 +50,7 @@ class HealoraHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -71,9 +72,9 @@ class HealoraHeader extends StatelessWidget {
                 ],
               ),
               if (isDesktop) ...[
-                const SizedBox(width: 20),
+                SizedBox(width: 20.w),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                   decoration: BoxDecoration(
                     color: HealoraColors.bone,
                     borderRadius: HealoraSpacing.borderControl,
@@ -83,7 +84,7 @@ class HealoraHeader extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.location_on_outlined, color: HealoraColors.teal, size: 18),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: state.selectedHubId,
@@ -124,7 +125,7 @@ class HealoraHeader extends StatelessWidget {
                   onTap: () => state.toggleOfflineMode(),
                   borderRadius: HealoraSpacing.borderControl,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                     decoration: BoxDecoration(
                       color: state.isOffline ? HealoraColors.warnBg : HealoraColors.mist,
                       borderRadius: HealoraSpacing.borderControl,
@@ -141,7 +142,7 @@ class HealoraHeader extends StatelessWidget {
                           color: state.isOffline ? HealoraColors.warnFg : HealoraColors.okFg,
                           size: 16,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           state.isOffline
                               ? state.t('Offline (${state.offlineOutbox.length})', 'অফলাইন (${state.offlineOutbox.length})')
@@ -156,14 +157,14 @@ class HealoraHeader extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
 
                 // Bilingual Toggle: "বাংলা · English"
                 InkWell(
                   onTap: () => state.toggleLanguage(),
                   borderRadius: HealoraSpacing.borderControl,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                     decoration: BoxDecoration(
                       color: HealoraColors.paper,
                       borderRadius: HealoraSpacing.borderControl,
@@ -173,7 +174,7 @@ class HealoraHeader extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Icons.translate, size: 16, color: HealoraColors.teal),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           'বাংলা · EN',
                           style: HealoraTypography.caption(
@@ -186,11 +187,11 @@ class HealoraHeader extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
 
                 // Active Role Switcher Dropdown
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: HealoraColors.mist,
                     borderRadius: HealoraSpacing.borderControl,
@@ -217,15 +218,15 @@ class HealoraHeader extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
 
                 // Notification bell with 16px clay badge (Spec Chapter 7.8)
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 40.w,
+                      height: 40.h,
                       decoration: BoxDecoration(
                         color: HealoraColors.paper,
                         shape: BoxShape.circle,
@@ -241,8 +242,8 @@ class HealoraHeader extends StatelessWidget {
                       top: 1,
                       right: 1,
                       child: Container(
-                        width: 16,
-                        height: 16,
+                        width: 16.w,
+                        height: 16.h,
                         decoration: const BoxDecoration(
                           color: HealoraColors.clay,
                           shape: BoxShape.circle,
