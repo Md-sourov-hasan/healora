@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
-import 'package:healora/core/services/healora_state.dart';
+import 'package:healora/features/audit/controllers/audit_controller.dart';
 import 'package:healora/core/models/audit_models.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
 
 class AuditScreen extends StatelessWidget {
-  final HealoraState state;
+  final AuditController controller;
 
-  const AuditScreen({super.key, required this.state});
+  const AuditScreen({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
+    final state = controller.state;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -176,8 +177,8 @@ class AuditScreen extends StatelessWidget {
           // Audit Entries List
           Text(
             state.t(
-              'Immutable Audit Trail Events (${state.auditLogs.length})',
-              'অডিট ট্রেইল ইভেন্ট লগ (${state.auditLogs.length})',
+              'Immutable Audit Trail Events (${controller.eventCount})',
+              'অডিট ট্রেইল ইভেন্ট লগ (${controller.eventCount})',
             ),
             style: HealoraTypography.h2(isBangla: state.isBangla),
           ),

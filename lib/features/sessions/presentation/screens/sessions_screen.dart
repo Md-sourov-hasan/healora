@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
-import 'package:healora/core/services/healora_state.dart';
 import 'package:healora/core/models/hub_models.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
 import 'package:healora/core/common/widgets/healora_button.dart';
@@ -12,13 +10,13 @@ import 'package:healora/core/common/widgets/healora_input.dart';
 import 'package:healora/features/sessions/controllers/sessions_controller.dart';
 
 class SessionsScreen extends StatelessWidget {
-  final HealoraState state;
+  final SessionsController controller;
 
-  const SessionsScreen({super.key, required this.state});
+  const SessionsScreen({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SessionsController(state));
+    final state = controller.state;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -382,6 +380,7 @@ class SessionsScreen extends StatelessWidget {
   }
 
   void _showCreateSessionModal(BuildContext context) {
+    final state = controller.state;
     showDialog(
       context: context,
       builder: (ctx) {

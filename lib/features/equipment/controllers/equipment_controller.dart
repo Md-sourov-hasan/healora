@@ -1,11 +1,8 @@
-import 'package:get/get.dart';
+import 'package:healora/core/controllers/healora_feature_controller.dart';
 import 'package:healora/core/models/hub_models.dart';
-import 'package:healora/core/services/healora_state.dart';
 
-class EquipmentController extends GetxController {
-  EquipmentController(this.state);
-
-  final HealoraState state;
+class EquipmentController extends HealoraFeatureController {
+  EquipmentController(super.state);
 
   void updateStatus(
     String equipmentId,

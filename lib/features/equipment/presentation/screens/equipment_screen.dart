@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:healora/core/theme/healora_colors.dart';
-import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
-import 'package:healora/core/services/healora_state.dart';
 import 'package:healora/core/models/hub_models.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
 import 'package:healora/core/common/widgets/healora_button.dart';
@@ -11,13 +8,13 @@ import 'package:healora/core/common/widgets/healora_status_pill.dart';
 import 'package:healora/features/equipment/controllers/equipment_controller.dart';
 
 class EquipmentScreen extends StatelessWidget {
-  final HealoraState state;
+  final EquipmentController controller;
 
-  const EquipmentScreen({super.key, required this.state});
+  const EquipmentScreen({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EquipmentController(state));
+    final state = controller.state;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(

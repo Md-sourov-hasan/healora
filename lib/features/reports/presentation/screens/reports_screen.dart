@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
-import 'package:healora/core/services/healora_state.dart';
+import 'package:healora/features/reports/controllers/reports_controller.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
 
 class ReportsScreen extends StatelessWidget {
-  final HealoraState state;
+  final ReportsController controller;
 
-  const ReportsScreen({super.key, required this.state});
+  const ReportsScreen({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final metrics = state.metrics;
+    final state = controller.state;
+    final metrics = controller.metrics;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),

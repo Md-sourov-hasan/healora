@@ -1,10 +1,7 @@
-import 'package:get/get.dart';
-import 'package:healora/core/services/healora_state.dart';
+import 'package:healora/core/controllers/healora_feature_controller.dart';
 
-class SessionsController extends GetxController {
-  SessionsController(this.state);
-
-  final HealoraState state;
+class SessionsController extends HealoraFeatureController {
+  SessionsController(super.state);
 
   void openQueue() {
     state.setNavIndex(3);

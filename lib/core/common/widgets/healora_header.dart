@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
-import 'package:healora/core/services/healora_state.dart';
+import 'package:healora/core/controllers/healora_state.dart';
 
 class HealoraHeader extends StatelessWidget {
   final HealoraState state;

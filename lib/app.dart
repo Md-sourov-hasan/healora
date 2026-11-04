@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healora/core/services/healora_state.dart';
+import 'package:healora/core/controllers/healora_state.dart';
 import 'package:healora/core/theme/healora_theme.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/common/widgets/healora_header.dart';
 import 'package:healora/core/common/widgets/healora_sidebar.dart';
-import 'package:healora/features/dashboard/controllers/dashboard_controller.dart';
-import 'package:healora/features/equipment/controllers/equipment_controller.dart';
-import 'package:healora/features/sessions/controllers/sessions_controller.dart';
 import 'package:healora/routes/app_routes.dart';
 
 class HealoraApp extends StatefulWidget {
@@ -20,20 +17,6 @@ class HealoraApp extends StatefulWidget {
 
 class _HealoraAppState extends State<HealoraApp> {
   final HealoraState _state = HealoraState();
-
-  @override
-  void dispose() {
-    if (Get.isRegistered<DashboardController>()) {
-      Get.delete<DashboardController>();
-    }
-    if (Get.isRegistered<SessionsController>()) {
-      Get.delete<SessionsController>();
-    }
-    if (Get.isRegistered<EquipmentController>()) {
-      Get.delete<EquipmentController>();
-    }
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
