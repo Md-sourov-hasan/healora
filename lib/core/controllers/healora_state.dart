@@ -11,84 +11,154 @@ enum HealoraRole {
   hubManager,
   receptionist,
   queueCoordinator,
+  equipmentOfficer,
+  readOnlyAuditor,
+  specialTeamLead,
   fieldHealthWorker,
   localDoctor,
+  registeredMedicalDoctor,
   patient,
+  caregiver,
+}
+
+extension HealoraRoleScope on HealoraRole {
+  bool get isTeamClinicalRole => const {
+    HealoraRole.specialTeamLead,
+    HealoraRole.fieldHealthWorker,
+    HealoraRole.localDoctor,
+    HealoraRole.registeredMedicalDoctor,
+  }.contains(this);
 }
 
 extension HealoraRoleExtension on HealoraRole {
   String get displayName {
     switch (this) {
       case HealoraRole.platformAdmin:
-        return 'Super Admin';
+        return 'Platform Super Admin';
       case HealoraRole.regionalManager:
-        return 'Regional Ops';
+        return 'Regional Operations Manager';
       case HealoraRole.hubManager:
         return 'Hub Manager';
       case HealoraRole.receptionist:
-        return 'Reception / Check-in';
+        return 'Reception / Registration Officer';
       case HealoraRole.queueCoordinator:
         return 'Queue Coordinator';
+      case HealoraRole.equipmentOfficer:
+        return 'Equipment / Facilities Officer';
+      case HealoraRole.readOnlyAuditor:
+        return 'Read-only Operations Auditor';
+      case HealoraRole.specialTeamLead:
+        return 'Special Team Lead';
       case HealoraRole.fieldHealthWorker:
-        return 'Special Team (Worker)';
+        return 'Field Health Worker';
       case HealoraRole.localDoctor:
-        return 'Local Doctor';
+        return 'Local / Assistant Doctor';
+      case HealoraRole.registeredMedicalDoctor:
+        return 'Registered Medical Doctor';
       case HealoraRole.patient:
-        return 'Patient App';
+        return 'Patient';
+      case HealoraRole.caregiver:
+        return 'Authorised Caregiver';
     }
   }
 
   String get bnDisplayName {
     switch (this) {
       case HealoraRole.platformAdmin:
-        return 'সুপার অ্যাডমিন';
+        return 'প্ল্যাটফর্ম সুপার অ্যাডমিন';
       case HealoraRole.regionalManager:
-        return 'আঞ্চলিক ব্যবস্থাপক';
+        return 'আঞ্চলিক অপারেশন ম্যানেজার';
       case HealoraRole.hubManager:
         return 'হাব ম্যানেজার';
       case HealoraRole.receptionist:
-        return 'রিসেপশন / চেক-ইন';
+        return 'রিসেপশন / নিবন্ধন কর্মকর্তা';
       case HealoraRole.queueCoordinator:
-        return 'কিউ কোঅর্ডিনেটর';
+        return 'কিউ সমন্বয়কারী';
+      case HealoraRole.equipmentOfficer:
+        return 'সরঞ্জাম / সুবিধা কর্মকর্তা';
+      case HealoraRole.readOnlyAuditor:
+        return 'শুধু পাঠযোগ্য অপারেশন অডিটর';
+      case HealoraRole.specialTeamLead:
+        return 'বিশেষ দলের প্রধান';
       case HealoraRole.fieldHealthWorker:
-        return 'স্পেশাল টিম (স্বাস্থ্যকর্মী)';
+        return 'মাঠ স্বাস্থ্যকর্মী';
       case HealoraRole.localDoctor:
-        return 'স্থানীয় ডাক্তার';
+        return 'স্থানীয় / সহকারী ডাক্তার';
+      case HealoraRole.registeredMedicalDoctor:
+        return 'নিবন্ধিত চিকিৎসক';
       case HealoraRole.patient:
-        return 'রোগী ভিউ';
+        return 'রোগী';
+      case HealoraRole.caregiver:
+        return 'অনুমোদিত পরিচর্যাকারী';
+    }
+  }
+
+  List<int> get allowedNavIndexes {
+    switch (this) {
+      case HealoraRole.platformAdmin:
+        return [0, 1, 2, 3, 4, 6, 7, 8, 9];
+      case HealoraRole.regionalManager:
+        return [0, 1, 2, 3, 6, 7, 8, 9];
+      case HealoraRole.hubManager:
+        return [0, 1, 2, 3, 4, 6, 7, 9];
+      case HealoraRole.receptionist:
+        return [0, 3, 4, 9];
+      case HealoraRole.queueCoordinator:
+        return [0, 3, 9];
+      case HealoraRole.equipmentOfficer:
+        return [0, 6, 9];
+      case HealoraRole.readOnlyAuditor:
+        return [0, 7, 8, 9];
+      case HealoraRole.specialTeamLead:
+      case HealoraRole.fieldHealthWorker:
+      case HealoraRole.localDoctor:
+      case HealoraRole.registeredMedicalDoctor:
+        return [5, 9];
+      case HealoraRole.patient:
+      case HealoraRole.caregiver:
+        return [];
     }
   }
 }
 
 class HealoraState extends GetxController {
   // Current settings
-  HealoraRole _activeRole = HealoraRole.hubManager;
-  bool _isBangla = false;
+  HealoraRole _activeRole = HealoraRole.fieldHealthWorker;
+  final RxBool _isBangla = false.obs;
   bool _isOffline = false;
   String _selectedHubId = 'hub_mkg_01';
-  int _currentNavIndex = 0;
+  int _currentNavIndex = 5;
 
   HealoraRole get activeRole => _activeRole;
-  bool get isBangla => _isBangla;
+  bool get isBangla => _isBangla.value;
+  RxBool get rxIsBangla => _isBangla;
   bool get isOffline => _isOffline;
   String get selectedHubId => _selectedHubId;
   int get currentNavIndex => _currentNavIndex;
 
   // Language helper
-  String t(String en, String bn) => _isBangla ? bn : en;
+  String t(String en, String bn) => _isBangla.value ? bn : en;
 
   void setRole(HealoraRole role) {
+    if (!role.isTeamClinicalRole) return;
     _activeRole = role;
+    if (!accessibleHubIds.contains(_selectedHubId) &&
+        accessibleHubIds.isNotEmpty) {
+      _selectedHubId = accessibleHubIds.first;
+    }
+    if (!role.allowedNavIndexes.contains(_currentNavIndex)) {
+      _currentNavIndex = role.allowedNavIndexes.first;
+    }
     update();
   }
 
   void setLanguage(bool isBangla) {
-    _isBangla = isBangla;
+    _isBangla.value = isBangla;
     update();
   }
 
   void toggleLanguage() {
-    _isBangla = !_isBangla;
+    _isBangla.value = !_isBangla.value;
     update();
   }
 
@@ -112,11 +182,13 @@ class HealoraState extends GetxController {
   }
 
   void setSelectedHub(String hubId) {
+    if (!accessibleHubIds.contains(hubId)) return;
     _selectedHubId = hubId;
     update();
   }
 
   void setNavIndex(int index) {
+    if (!_activeRole.allowedNavIndexes.contains(index)) return;
     _currentNavIndex = index;
     update();
   }
@@ -131,16 +203,103 @@ class HealoraState extends GetxController {
   List<Encounter> _encounters = [];
   final List<Observation> _offlineOutbox = [];
   List<AuditLogEntry> _auditLogs = [];
+  List<ConsentRecord> _consentRecords = [];
+  List<NotificationItem> _notifications = [];
 
-  List<Hub> get hubs => _hubs;
-  List<HubSession> get sessions => _sessions;
-  List<HubStation> get stations => _stations;
-  List<HubEquipment> get equipment => _equipment;
-  List<Appointment> get appointments => _appointments;
-  List<QueueTicket> get queue => _queue;
-  List<Encounter> get encounters => _encounters;
+  final PatientProfile _currentPatient = const PatientProfile(
+    id: 'pat_89211',
+    canonicalCode: 'PAT-BD-89211',
+    fullName: 'Rahima Begum',
+    phone: '+880 1712-345678',
+    age: 48,
+    gender: 'Female',
+    upazila: 'Manikganj Sadar',
+    district: 'Manikganj',
+    bloodGroup: 'B+',
+    emergencyContact: '+880 1819-876543 (Rafiqul Islam, Son)',
+    hasActiveConsent: true,
+    consentDate: '2026-11-01',
+  );
+
+  PatientProfile get currentPatient => _currentPatient;
+  List<ConsentRecord> get consentRecords => _consentRecords;
+  List<NotificationItem> get notifications => _notifications;
+
+  void addNotification({
+    required String category,
+    required String title,
+    required String body,
+    String? appointmentId,
+  }) {
+    _notifications.insert(
+      0,
+      NotificationItem(
+        id: 'notif_${DateTime.now().millisecondsSinceEpoch}',
+        category: category,
+        title: title,
+        body: body,
+        timestamp: 'Just now',
+        isRead: false,
+        appointmentId: appointmentId,
+      ),
+    );
+    update();
+  }
+
+  void markAllNotificationsRead() {
+    _notifications = _notifications
+        .map((n) => n.copyWith(isRead: true))
+        .toList();
+    update();
+  }
+
+  void markNotificationRead(String id) {
+    final idx = _notifications.indexWhere((n) => n.id == id);
+    if (idx != -1) {
+      _notifications[idx] = _notifications[idx].copyWith(isRead: true);
+      update();
+    }
+  }
+
+  List<String> get accessibleHubIds {
+    if (_activeRole == HealoraRole.platformAdmin ||
+        _activeRole == HealoraRole.patient ||
+        _activeRole == HealoraRole.caregiver) {
+      return _hubs.map((hub) => hub.id).toList();
+    }
+    if (_activeRole == HealoraRole.regionalManager) {
+      return _hubs
+          .where((hub) => hub.division == 'Dhaka')
+          .map((hub) => hub.id)
+          .toList();
+    }
+    return ['hub_mkg_01'];
+  }
+
+  List<Hub> get hubs =>
+      _hubs.where((hub) => accessibleHubIds.contains(hub.id)).toList();
+  List<HubSession> get sessions => _sessions
+      .where((session) => accessibleHubIds.contains(session.hubId))
+      .toList();
+  List<HubStation> get stations => _stations
+      .where((station) => accessibleHubIds.contains(station.hubId))
+      .toList();
+  List<HubEquipment> get equipment => _equipment
+      .where((item) => accessibleHubIds.contains(item.hubId))
+      .toList();
+  List<Appointment> get appointments => _appointments
+      .where((appointment) => accessibleHubIds.contains(appointment.hubId))
+      .toList();
+  List<QueueTicket> get queue => _queue
+      .where((ticket) => accessibleHubIds.contains(ticket.hubId))
+      .toList();
+  List<Encounter> get encounters => _encounters
+      .where((encounter) => accessibleHubIds.contains(encounter.hubId))
+      .toList();
   List<Observation> get offlineOutbox => _offlineOutbox;
-  List<AuditLogEntry> get auditLogs => _auditLogs;
+  List<AuditLogEntry> get auditLogs => _auditLogs
+      .where((entry) => accessibleHubIds.contains(entry.hubId))
+      .toList();
 
   Hub get currentHub => _hubs.firstWhere(
     (h) => h.id == _selectedHubId,
@@ -742,7 +901,7 @@ class HealoraState extends GetxController {
         action: 'OBSERVATION_SUBMITTED',
         entityType: 'Observation',
         entityId: 'enc_01',
-        details: 'Submitted 6 structured vital signs for patient PAT-BD-89211 with device attribution.',
+        details: 'Submitted 6 structured observations for encounter enc_01 with device attribution.',
         complianceStandard: 'PDPA 2026 Sec 22',
       ),
       AuditLogEntry(
@@ -755,7 +914,7 @@ class HealoraState extends GetxController {
         action: 'PATIENT_CHECKED_IN',
         entityType: 'QueueTicket',
         entityId: 'tkt_01',
-        details: 'Verified canonical identity, verified consent, generated token HUB-MKG-014.',
+        details: 'Verified identity and visit consent; generated queue token HUB-MKG-014.',
         complianceStandard: 'DGHS Telehealth Art 4',
       ),
       AuditLogEntry(
@@ -770,6 +929,57 @@ class HealoraState extends GetxController {
         entityId: 'ses_20261104_01',
         details: 'Validated minimum staffing (3/3 roles) and mandatory equipment (4/4 items).',
         complianceStandard: 'Clinical Safety Protocol v2',
+      ),
+    ];
+
+    _consentRecords = [
+      const ConsentRecord(
+        consentId: 'cns_89211_01',
+        patientId: 'pat_89211',
+        patientName: 'Rahima Begum',
+        consentHubService: true,
+        consentDataProcessing: true,
+        consentTelehealthConsult: true,
+        capturedBy: 'Nasrin Sultana (Field Health Worker)',
+        capturedAt: '2026-11-01 09:30 BST',
+        legalBasis: 'PDPA 2026 Section 14',
+      ),
+    ];
+
+    _notifications = [
+      const NotificationItem(
+        id: 'notif_01',
+        category: 'Appointment',
+        title: 'Upcoming Visit Reminder',
+        body: 'Your visit at Manikganj Rural Care Hub is scheduled for Thu 12 Nov at 10:30 AM.',
+        timestamp: '10 mins ago',
+        isRead: false,
+        appointmentId: 'apt_01',
+      ),
+      const NotificationItem(
+        id: 'notif_02',
+        category: 'Queue',
+        title: 'Queue Token Issued',
+        body: 'Token HUB-MKG-014 has been issued for Vitals Station 1.',
+        timestamp: '1 hour ago',
+        isRead: false,
+        appointmentId: 'apt_01',
+      ),
+      const NotificationItem(
+        id: 'notif_03',
+        category: 'Clinical',
+        title: 'Clinical Results Verified',
+        body: 'Dr. Tariqul Islam has signed and verified your health checkup results.',
+        timestamp: '2 hours ago',
+        isRead: true,
+      ),
+      const NotificationItem(
+        id: 'notif_04',
+        category: 'Consent',
+        title: 'Consent Stored under PDPA 2026',
+        body: 'Your voluntary health measurement consent has been recorded securely.',
+        timestamp: '1 day ago',
+        isRead: true,
       ),
     ];
   }
@@ -805,11 +1015,35 @@ class HealoraState extends GetxController {
   }
 
   // Check in an existing appointment
-  void checkInAppointment(String appointmentId) {
+  bool checkInAppointment(
+    String appointmentId, {
+    required bool consentConfirmed,
+  }) {
+    if (!_canManageCheckIn || !consentConfirmed) return false;
     final int apptIdx = _appointments.indexWhere((a) => a.id == appointmentId);
-    if (apptIdx == -1) return;
+    if (apptIdx == -1) return false;
 
     final Appointment appt = _appointments[apptIdx];
+    if (!accessibleHubIds.contains(appt.hubId)) return false;
+    if (appt.status != AppointmentStatus.confirmed &&
+        appt.status != AppointmentStatus.arrived) {
+      return false;
+    }
+    if (_queue.any((ticket) => ticket.appointmentId == appt.id)) return false;
+    final int sessionIndex = _sessions.indexWhere(
+      (item) => item.id == appt.sessionId,
+    );
+    if (sessionIndex == -1 ||
+        !accessibleHubIds.contains(_sessions[sessionIndex].hubId)) {
+      return false;
+    }
+    _addAudit(
+      action: 'HUB_SERVICE_CONSENT_CONFIRMED',
+      entityType: 'Appointment',
+      entityId: appt.id,
+      details: 'Patient or authorised representative confirmed in-person hub measurement consent.',
+      compliance: 'Patient consent workflow',
+    );
     _appointments[apptIdx] = appt.copyWith(status: AppointmentStatus.checkedIn);
 
     final String token =
@@ -823,12 +1057,12 @@ class HealoraState extends GetxController {
       patientName: appt.patientName,
       hubId: appt.hubId,
       sessionId: appt.sessionId,
-      currentStationId: 'st_02',
-      currentStationName: 'Station 2: Vitals & Anthropometry',
+      currentStationId: 'st_01',
+      currentStationName: 'Station 1: Reception & Check-in',
       status: QueueStatus.waiting,
       arrivalTime: '09:40 AM',
       waitDurationMinutes: 0,
-      assignedWorker: 'Nasrin Sultana',
+      assignedWorker: '',
     );
     _queue.add(ticket);
 
@@ -846,9 +1080,9 @@ class HealoraState extends GetxController {
       hubName: appt.hubName,
       sessionId: appt.sessionId,
       openedAt: '2026-11-04 09:40 AM',
-      assignedWorker: 'Nasrin Sultana',
+      assignedWorker: '',
       assignedDoctor: 'Dr. Tariqul Islam (BMDC A-54910)',
-      status: EncounterStatus.assigned,
+      status: EncounterStatus.created,
       disposition: EncounterDisposition.inProgress,
       observations: [],
       overallSyncState: _isOffline ? SyncState.capturedLocal : SyncState.synced,
@@ -860,51 +1094,85 @@ class HealoraState extends GetxController {
       entityType: 'QueueTicket',
       entityId: ticket.ticketId,
       details:
-          'Checked in ${appt.patientName} (${appt.appointmentCode}). Token $token issued.',
+          'Appointment ${appt.appointmentCode} checked in. Token $token issued.',
       compliance: 'PDPA 2026 Sec 14',
     );
 
     update();
+    return true;
   }
 
-  // Register walk-in patient
-  void registerWalkIn({
+  // Register an assisted walk-in against available capacity for this hub.
+  bool registerWalkIn({
     required String fullName,
     required String phone,
     required int age,
     required String gender,
+    required bool consentConfirmed,
   }) {
+    if (!_canManageCheckIn ||
+        !consentConfirmed ||
+        fullName.trim().isEmpty ||
+        age < 0 ||
+        age > 120 ||
+        gender.trim().isEmpty) {
+      return false;
+    }
+    final int sessionIndex = _sessions.indexWhere(
+      (session) =>
+          session.hubId == currentHub.id &&
+          (session.status == SessionStatus.inProgress ||
+              session.status == SessionStatus.openForBooking) &&
+          session.walkInCurrent < session.walkInCapacity,
+    );
+    if (sessionIndex == -1) return false;
+
+    final String normalizedPhone = phone.replaceAll(RegExp(r'\D'), '');
+    if (normalizedPhone.isNotEmpty &&
+        _appointments.any(
+          (appointment) =>
+              appointment.patientPhone.replaceAll(RegExp(r'\D'), '') ==
+              normalizedPhone,
+        )) {
+      return false;
+    }
     final String apptId = 'apt_${DateTime.now().millisecondsSinceEpoch}';
     final String apptCode =
         'WALK-${DateTime.now().millisecondsSinceEpoch % 10000}';
     final String patId =
         'pat_bd_${DateTime.now().millisecondsSinceEpoch % 10000}';
+    final HubSession session = _sessions[sessionIndex];
 
     final Appointment walkInAppt = Appointment(
       id: apptId,
       appointmentCode: apptCode,
       patientId: patId,
-      patientName: fullName,
-      patientPhone: phone,
+      patientName: fullName.trim(),
+      patientPhone: phone.trim(),
       patientAge: age,
       patientGender: gender,
       hubId: currentHub.id,
       hubName: currentHub.name,
-      sessionId: _sessions.first.id,
-      sessionTitle: _sessions.first.title,
-      date: '2026-11-04',
+      sessionId: session.id,
+      sessionTitle: session.title,
+      date: session.date,
       slotTime: 'Walk-in Now',
       bookingSource: 'walk_in',
-      status: AppointmentStatus.checkedIn,
+      status: AppointmentStatus.confirmed,
     );
     _appointments.insert(0, walkInAppt);
-
-    // Update walk-in count on session
-    _sessions[0] = _sessions[0].copyWith(
-      walkInCurrent: _sessions[0].walkInCurrent + 1,
+    _sessions[sessionIndex] = session.copyWith(
+      walkInCurrent: session.walkInCurrent + 1,
     );
-
-    checkInAppointment(apptId);
+    _addAudit(
+      action: 'HUB_SERVICE_CONSENT_RECORDED',
+      entityType: 'Appointment',
+      entityId: apptId,
+      details:
+          'In-person hub measurement consent confirmed for assisted walk-in.',
+      compliance: 'Patient consent workflow',
+    );
+    return checkInAppointment(apptId, consentConfirmed: true);
   }
 
   // Update Queue Ticket Status
@@ -913,12 +1181,34 @@ class HealoraState extends GetxController {
     QueueStatus newStatus, {
     String? delayReason,
   }) {
+    if (!_canManageQueue) return;
     final int idx = _queue.indexWhere((q) => q.ticketId == ticketId);
     if (idx != -1) {
+      if (!accessibleHubIds.contains(_queue[idx].hubId)) return;
+      if (newStatus == QueueStatus.completed ||
+          newStatus == QueueStatus.awaitingReview) {
+        return;
+      }
       _queue[idx] = _queue[idx].copyWith(
         status: newStatus,
         delayReason: delayReason,
       );
+      final QueueTicket ticket = _queue[idx];
+      final int appointmentIndex = _appointments.indexWhere(
+        (appointment) => appointment.id == ticket.appointmentId,
+      );
+      if (newStatus == QueueStatus.inService && appointmentIndex != -1) {
+        _appointments[appointmentIndex] = _appointments[appointmentIndex]
+            .copyWith(status: AppointmentStatus.inService);
+      }
+      final int encounterIndex = _encounters.indexWhere(
+        (encounter) => encounter.appointmentId == ticket.appointmentId,
+      );
+      if (encounterIndex != -1 && newStatus == QueueStatus.inService) {
+        _encounters[encounterIndex] = _encounters[encounterIndex].copyWith(
+          status: EncounterStatus.inProgress,
+        );
+      }
 
       _addAudit(
         action: 'QUEUE_STATUS_UPDATED',
@@ -945,8 +1235,22 @@ class HealoraState extends GetxController {
     String? repeatReason,
     bool isAbnormal = false,
   }) {
+    if (_activeRole != HealoraRole.fieldHealthWorker) return;
     final int encIdx = _encounters.indexWhere((e) => e.id == encounterId);
     if (encIdx == -1) return;
+    if (!accessibleHubIds.contains(_encounters[encIdx].hubId)) return;
+    if (_encounters[encIdx].status == EncounterStatus.completed ||
+        _encounters[encIdx].status == EncounterStatus.submittedForReview ||
+        _encounters[encIdx].status == EncounterStatus.awaitingSync) {
+      return;
+    }
+    final double? numericValue = double.tryParse(value.trim());
+    if (value.trim().isEmpty ||
+        numericValue == null ||
+        !numericValue.isFinite ||
+        numericValue <= 0) {
+      return;
+    }
 
     final String obsId = 'obs_${DateTime.now().millisecondsSinceEpoch}';
     final String idempotencyKey =
@@ -993,7 +1297,7 @@ class HealoraState extends GetxController {
       entityType: 'Observation',
       entityId: obsId,
       details:
-          '$label: $value $unit ($deviceAttribution). Sync: ${syncStatus.name}.',
+          '$label recorded. Device: $deviceAttribution. Sync: ${syncStatus.name}.',
       compliance: 'PDPA 2026 Sec 22',
     );
 
@@ -1013,10 +1317,24 @@ class HealoraState extends GetxController {
         return o.copyWith(syncState: SyncState.synced);
       }).toList();
 
-      _encounters[i] = _encounters[i].copyWith(
+      final Encounter encounter = _encounters[i];
+      final bool readyForReview =
+          encounter.status == EncounterStatus.awaitingSync;
+      _encounters[i] = encounter.copyWith(
         observations: syncedObs,
         overallSyncState: SyncState.synced,
+        status: readyForReview ? EncounterStatus.submittedForReview : null,
       );
+      if (readyForReview) {
+        final int ticketIndex = _queue.indexWhere(
+          (ticket) => ticket.appointmentId == encounter.appointmentId,
+        );
+        if (ticketIndex != -1) {
+          _queue[ticketIndex] = _queue[ticketIndex].copyWith(
+            status: QueueStatus.awaitingReview,
+          );
+        }
+      }
     }
 
     _addAudit(
@@ -1031,6 +1349,56 @@ class HealoraState extends GetxController {
     update();
   }
 
+  void submitEncounterForReview(String encounterId) {
+    if (_activeRole != HealoraRole.fieldHealthWorker) return;
+    final int encounterIndex = _encounters.indexWhere(
+      (e) => e.id == encounterId,
+    );
+    if (encounterIndex == -1 ||
+        _encounters[encounterIndex].observations.isEmpty) {
+      return;
+    }
+    final Encounter encounter = _encounters[encounterIndex];
+    if (!accessibleHubIds.contains(encounter.hubId)) return;
+    if (encounter.status == EncounterStatus.completed ||
+        encounter.status == EncounterStatus.submittedForReview ||
+        encounter.status == EncounterStatus.awaitingSync) {
+      return;
+    }
+    final bool awaitingSync =
+        _isOffline ||
+        encounter.observations.any(
+          (observation) => observation.syncState != SyncState.synced,
+        );
+    _encounters[encounterIndex] = encounter.copyWith(
+      status: awaitingSync
+          ? EncounterStatus.awaitingSync
+          : EncounterStatus.submittedForReview,
+    );
+    if (!awaitingSync) {
+      final int ticketIndex = _queue.indexWhere(
+        (ticket) => ticket.appointmentId == encounter.appointmentId,
+      );
+      if (ticketIndex != -1) {
+        _queue[ticketIndex] = _queue[ticketIndex].copyWith(
+          status: QueueStatus.awaitingReview,
+        );
+      }
+    }
+    _addAudit(
+      action: awaitingSync
+          ? 'ENCOUNTER_WAITING_FOR_SYNC'
+          : 'ENCOUNTER_SUBMITTED_FOR_DOCTOR_REVIEW',
+      entityType: 'Encounter',
+      entityId: encounterId,
+      details: awaitingSync
+          ? 'Encounter retained locally and marked as awaiting central acknowledgement.'
+          : 'Assigned measurement task submitted to the local doctor review queue.',
+      compliance: 'Shared encounter workflow',
+    );
+    update();
+  }
+
   // Submit doctor review and disposition
   void submitDoctorReview({
     required String encounterId,
@@ -1040,8 +1408,18 @@ class HealoraState extends GetxController {
     required String plan,
     required EncounterDisposition disposition,
   }) {
+    if (_activeRole != HealoraRole.localDoctor &&
+        _activeRole != HealoraRole.registeredMedicalDoctor) {
+      return;
+    }
     final int encIdx = _encounters.indexWhere((e) => e.id == encounterId);
     if (encIdx == -1) return;
+    if (!accessibleHubIds.contains(_encounters[encIdx].hubId)) return;
+    if (_encounters[encIdx].status != EncounterStatus.submittedForReview ||
+        assessment.trim().isEmpty ||
+        plan.trim().isEmpty) {
+      return;
+    }
 
     final ClinicalReviewNote note = ClinicalReviewNote(
       id: 'rev_${DateTime.now().millisecondsSinceEpoch}',
@@ -1067,6 +1445,13 @@ class HealoraState extends GetxController {
     if (tktIdx != -1) {
       _queue[tktIdx] = _queue[tktIdx].copyWith(status: QueueStatus.completed);
     }
+    final int appointmentIndex = _appointments.indexWhere(
+      (appointment) => appointment.id == _encounters[encIdx].appointmentId,
+    );
+    if (appointmentIndex != -1) {
+      _appointments[appointmentIndex] = _appointments[appointmentIndex]
+          .copyWith(status: AppointmentStatus.completed);
+    }
 
     _addAudit(
       action: 'DOCTOR_REVIEW_COMPLETED',
@@ -1086,8 +1471,10 @@ class HealoraState extends GetxController {
     EquipmentStatus newStatus, {
     String? notes,
   }) {
+    if (!_canManageEquipment) return;
     final int idx = _equipment.indexWhere((e) => e.id == equipmentId);
     if (idx != -1) {
+      if (!accessibleHubIds.contains(_equipment[idx].hubId)) return;
       _equipment[idx] = _equipment[idx].copyWith(
         status: newStatus,
         notes: notes,
@@ -1104,26 +1491,45 @@ class HealoraState extends GetxController {
     }
   }
 
+  bool get _canManageCheckIn =>
+      _activeRole == HealoraRole.platformAdmin ||
+      _activeRole == HealoraRole.regionalManager ||
+      _activeRole == HealoraRole.hubManager ||
+      _activeRole == HealoraRole.receptionist;
+
+  bool get _canManageQueue =>
+      _canManageCheckIn || _activeRole == HealoraRole.queueCoordinator;
+
+  bool get _canManageEquipment =>
+      _activeRole == HealoraRole.platformAdmin ||
+      _activeRole == HealoraRole.regionalManager ||
+      _activeRole == HealoraRole.hubManager ||
+      _activeRole == HealoraRole.equipmentOfficer;
+
   // Operational metrics
   OperationalMetrics get metrics {
-    final int totalAppts = _appointments.length;
-    final int arrived = _appointments
+    final List<Appointment> scopedAppointments = appointments;
+    final List<QueueTicket> scopedQueue = queue;
+    final List<Encounter> scopedEncounters = encounters;
+    final List<HubEquipment> scopedEquipment = equipment;
+    final int totalAppts = scopedAppointments.length;
+    final int arrived = scopedAppointments
         .where(
           (a) =>
               a.status != AppointmentStatus.confirmed &&
               a.status != AppointmentStatus.pendingConfirmation,
         )
         .length;
-    final int checkedIn = _appointments
+    final int checkedIn = scopedAppointments
         .where((a) => a.status == AppointmentStatus.checkedIn)
         .length;
-    final int inService = _queue
+    final int inService = scopedQueue
         .where((q) => q.status == QueueStatus.inService)
         .length;
-    final int completed = _encounters
+    final int completed = scopedEncounters
         .where((e) => e.status == EncounterStatus.completed)
         .length;
-    final int equipIssues = _equipment
+    final int equipIssues = scopedEquipment
         .where(
           (e) =>
               e.status == EquipmentStatus.outOfService ||
@@ -1132,8 +1538,8 @@ class HealoraState extends GetxController {
         .length;
 
     return OperationalMetrics(
-      activeHubs: _hubs.where((h) => h.status == HubStatus.active).length,
-      todaySessions: _sessions.length,
+      activeHubs: hubs.where((h) => h.status == HubStatus.active).length,
+      todaySessions: sessions.length,
       totalAppointments: totalAppts,
       arrivedCount: arrived,
       checkedInCount: checkedIn,

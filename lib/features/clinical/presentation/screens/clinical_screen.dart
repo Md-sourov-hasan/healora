@@ -4,6 +4,7 @@ import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
 import 'package:healora/core/models/clinical_models.dart';
+import 'package:healora/core/controllers/healora_state.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
 import 'package:healora/core/common/widgets/healora_button.dart';
 import 'package:healora/core/common/widgets/healora_status_pill.dart';
@@ -20,6 +21,10 @@ class ClinicalScreen extends StatelessWidget {
     final state = controller.state;
     final activeEncounter = controller.activeEncounter;
 
+    final bool canCapture = state.activeRole == HealoraRole.fieldHealthWorker;
+    final bool canReview =
+        state.activeRole == HealoraRole.localDoctor ||
+        state.activeRole == HealoraRole.registeredMedicalDoctor;
     final double? bmi = controller.bmi;
 
     return SingleChildScrollView(
@@ -180,8 +185,16 @@ class ClinicalScreen extends StatelessWidget {
                   padding: EdgeInsets.all(32.r),
                   child: Text(
                     state.t(
-                      'No active encounter found. Please check in a patient first.',
-                      'কোনো সক্রিয় এনকাউন্টার নেই। অনুগ্রহ করে প্রথমে রোগী চেক-ইন করুন।',
+                      state.activeRole == HealoraRole.localDoctor ||
+                              state.activeRole ==
+                                  HealoraRole.registeredMedicalDoctor
+                          ? 'No encounter is waiting for doctor review.'
+                          : 'No encounter is available in your current assignment.',
+                      state.activeRole == HealoraRole.localDoctor ||
+                              state.activeRole ==
+                                  HealoraRole.registeredMedicalDoctor
+                          ? 'No encounter is waiting for doctor review.'
+                          : 'No encounter is available in your current assignment.',
                     ),
                     style: HealoraTypography.body(isBangla: state.isBangla),
                   ),
@@ -195,97 +208,107 @@ class ClinicalScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: 52.w,
-                        height: 52.h,
-                        decoration: BoxDecoration(
-                          color: HealoraColors.teal,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 28,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 52.w,
+                            height: 52.h,
+                            decoration: BoxDecoration(
+                              color: HealoraColors.teal,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+                          SizedBox(width: 16.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Wrap(
+                                  spacing: 10.w,
+                                  runSpacing: 8.h,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text(
+                                      activeEncounter.patientName,
+                                      style: HealoraTypography.h2(
+                                        color: HealoraColors.ink,
+                                        isBangla: state.isBangla,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8.w,
+                                        vertical: 2.h,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: HealoraColors.mist,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        activeEncounter.patientCode,
+                                        style: HealoraTypography.label(
+                                          color: HealoraColors.pine,
+                                          isBangla: state.isBangla,
+                                        ),
+                                      ),
+                                    ),
+                                    HealoraStatusPill(
+                                      label: activeEncounter.statusLabel,
+                                      type:
+                                          activeEncounter.status ==
+                                              EncounterStatus.completed
+                                          ? HealoraPillType.completed
+                                          : HealoraPillType.inService,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4.h),
                                 Text(
-                                  activeEncounter.patientName,
-                                  style: HealoraTypography.h2(
-                                    color: HealoraColors.ink,
+                                  '${activeEncounter.patientAge} ${state.t("yrs", "বছর")}, ${activeEncounter.patientGender} · ${activeEncounter.hubName} · ${state.t("Assigned Worker:", "দায়িত্বপ্রাপ্ত স্বাস্থ্যকর্মী:")} ${activeEncounter.assignedWorker}',
+                                  style: HealoraTypography.caption(
+                                    color: HealoraColors.slate,
                                     isBangla: state.isBangla,
                                   ),
                                 ),
-                                SizedBox(width: 10.w),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w,
-                                    vertical: 2.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: HealoraColors.mist,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    activeEncounter.patientCode,
-                                    style: HealoraTypography.label(
-                                      color: HealoraColors.pine,
-                                      isBangla: state.isBangla,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8.w),
-                                HealoraStatusPill(
-                                  label: activeEncounter.statusLabel,
-                                  type:
-                                      activeEncounter.status ==
-                                          EncounterStatus.completed
-                                      ? HealoraPillType.completed
-                                      : HealoraPillType.inService,
-                                ),
                               ],
                             ),
-                            SizedBox(height: 4.h),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
                             Text(
-                              '${activeEncounter.patientAge} ${state.t("yrs", "বছর")}, ${activeEncounter.patientGender} · ${activeEncounter.hubName} · ${state.t("Assigned Worker:", "দায়িত্বপ্রাপ্ত স্বাস্থ্যকর্মী:")} ${activeEncounter.assignedWorker}',
-                              style: HealoraTypography.caption(
+                              controller.ticketLabel(activeEncounter.ticketId),
+                              style: HealoraTypography.tabular(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: HealoraColors.ink,
+                              ),
+                            ),
+                            Text(
+                              activeEncounter.openedAt,
+                              style: HealoraTypography.micro(
                                 color: HealoraColors.slate,
                                 isBangla: state.isBangla,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            controller.ticketLabel(activeEncounter.ticketId),
-                            style: HealoraTypography.tabular(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: HealoraColors.ink,
-                            ),
-                          ),
-                          Text(
-                            activeEncounter.openedAt,
-                            style: HealoraTypography.micro(
-                              color: HealoraColors.slate,
-                              isBangla: state.isBangla,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -540,8 +563,9 @@ class ClinicalScreen extends StatelessWidget {
                                       value: controller.glucoseContext,
                                       isExpanded: true,
                                       onChanged: (v) {
-                                        if (v != null)
+                                        if (v != null) {
                                           controller.selectGlucoseContext(v);
+                                        }
                                       },
                                       items: const [
                                         DropdownMenuItem(
@@ -595,9 +619,7 @@ class ClinicalScreen extends StatelessWidget {
                             child: Container(
                               height: 56.h,
                               margin: EdgeInsets.only(top: 22.h),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 14.w,
-                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 14.w),
                               decoration: BoxDecoration(
                                 color: HealoraColors.mist,
                                 borderRadius: HealoraSpacing.borderControl,
@@ -696,18 +718,32 @@ class ClinicalScreen extends StatelessWidget {
                           'পরিমাপসমূহ সংরক্ষণ ও জমা দিন',
                         ),
                         onPressed: () {
-                          controller.saveObservations(activeEncounter.id);
+                          if (!controller.saveObservations(
+                            activeEncounter.id,
+                          )) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  state.t(
+                                    'Enter valid values for every required measurement and a reason for repeats.',
+                                    'প্রতিটি প্রয়োজনীয় মাপের সঠিক মান দিন; পুনরায় মাপলে কারণ লিখুন।',
+                                  ),
+                                ),
+                              ),
+                            );
+                            return;
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: HealoraColors.ink,
                               content: Text(
                                 state.t(
                                   state.isOffline
-                                      ? 'Observations saved locally to encrypted offline outbox'
-                                      : 'Observations successfully submitted to central record',
+                                      ? 'Saved locally. The encounter is waiting for sync before doctor review.'
+                                      : 'Measurements submitted to the local doctor review queue.',
                                   state.isOffline
-                                      ? 'তথ্যসমূহ অফলাইন সুরক্ষিত আউটবক্সে সংরক্ষিত'
-                                      : 'তথ্যসমূহ কেন্দ্রীয় রেকর্ডে জমা সম্পন্ন হয়েছে',
+                                      ? 'Saved locally. The encounter is waiting for sync before doctor review.'
+                                      : 'Measurements submitted to the local doctor review queue.',
                                 ),
                               ),
                             ),
@@ -776,7 +812,7 @@ class ClinicalScreen extends StatelessWidget {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: activeEncounter.observations.length,
-                              separatorBuilder: (_, __) => Divider(
+                              separatorBuilder: (_, _) => Divider(
                                 color: HealoraColors.line,
                                 height: 16.h,
                               ),
@@ -872,188 +908,206 @@ class ClinicalScreen extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(height: 20.h),
+                    if (canReview) ...[
+                      SizedBox(height: 20.h),
 
-                    // Local Doctor Review Section (PRD Section 6.2 & 9.7)
-                    HealoraCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 36.w,
-                                height: 36.h,
-                                decoration: BoxDecoration(
-                                  color: HealoraColors.ink,
-                                  borderRadius: BorderRadius.circular(10),
+                      // Local Doctor Review Section (PRD Section 6.2 & 9.7)
+                      HealoraCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 36.w,
+                                  height: 36.h,
+                                  decoration: BoxDecoration(
+                                    color: HealoraColors.ink,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Icon(
+                                    Icons.medical_information,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.medical_information,
-                                  color: Colors.white,
-                                  size: 20,
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        state.t(
+                                          'Local Doctor Review & Disposition',
+                                          'স্থানীয় ডাক্তারের পর্যালোচনা ও সিদ্ধান্ত',
+                                        ),
+                                        style: HealoraTypography.h3(
+                                          isBangla: state.isBangla,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Dr. Tariqul Islam · BMDC Registration: A-54910',
+                                        style: HealoraTypography.micro(
+                                          color: HealoraColors.slate,
+                                          isBangla: state.isBangla,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 16.h),
+
+                            HealoraTextField(
+                              controller: controller.doctorAssessmentController,
+                              label: state.t(
+                                'Clinical Assessment',
+                                'ক্লিনিক্যাল মূল্যায়ন',
+                              ),
+                              maxLines: 2,
+                              isBangla: state.isBangla,
+                            ),
+
+                            SizedBox(height: 12.h),
+
+                            HealoraTextField(
+                              controller: controller.doctorPlanController,
+                              label: state.t(
+                                'Management Plan & Advice',
+                                'ব্যবস্থাপনা পরিকল্পনা ও পরামর্শ',
+                              ),
+                              maxLines: 2,
+                              isBangla: state.isBangla,
+                            ),
+
+                            SizedBox(height: 14.h),
+
+                            // Disposition Selector
+                            Text(
+                              state.t(
+                                'Encounter Disposition',
+                                'এনকাউন্টারের চূড়ান্ত সিদ্ধান্ত',
+                              ),
+                              style: HealoraTypography.caption(
+                                color: HealoraColors.slate,
+                                isBangla: state.isBangla,
+                              ).copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 6.h),
+                            Container(
+                              height: 52.h,
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                color: HealoraColors.paper,
+                                borderRadius: HealoraSpacing.borderControl,
+                                border: Border.all(
+                                  color: HealoraColors.line,
+                                  width: 1,
                                 ),
                               ),
-                              SizedBox(width: 12.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.t(
-                                        'Local Doctor Review & Disposition',
-                                        'স্থানীয় ডাক্তারের পর্যালোচনা ও সিদ্ধান্ত',
-                                      ),
-                                      style: HealoraTypography.h3(
-                                        isBangla: state.isBangla,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<EncounterDisposition>(
+                                  value: controller.selectedDisposition,
+                                  isExpanded: true,
+                                  onChanged: (v) {
+                                    if (v != null) {
+                                      controller.selectDisposition(v);
+                                    }
+                                  },
+                                  items: [
+                                    DropdownMenuItem(
+                                      value: EncounterDisposition.completed,
+                                      child: Text(
+                                        state.t(
+                                          'Routine Completed - Results Sent to Patient App',
+                                          'সম্পন্ন - ফলাফল রোগী অ্যাপে প্রেরণ',
+                                        ),
                                       ),
                                     ),
-                                    Text(
-                                      'Dr. Tariqul Islam · BMDC Registration: A-54910',
-                                      style: HealoraTypography.micro(
-                                        color: HealoraColors.slate,
-                                        isBangla: state.isBangla,
+                                    DropdownMenuItem(
+                                      value:
+                                          EncounterDisposition.followUpRequired,
+                                      child: Text(
+                                        state.t(
+                                          'Follow-up Required at Hub in 14 Days',
+                                          '১৪ দিন পর ফলো-আপ আবশ্যক',
+                                        ),
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: EncounterDisposition
+                                          .teleconsultScheduled,
+                                      child: Text(
+                                        state.t(
+                                          'Schedule Specialist Teleconsultation (Chennai/Bangalore)',
+                                          'বিশেষজ্ঞ টেলি-কনসাল্টেশন শিডিউল',
+                                        ),
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: EncounterDisposition
+                                          .referredToHospital,
+                                      child: Text(
+                                        state.t(
+                                          'Urgent Referral to Sadar 250-Bed Hospital',
+                                          'জরুরি রেফারেল - সদর হাসপাতাল',
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-
-                          SizedBox(height: 16.h),
-
-                          HealoraTextField(
-                            controller: controller.doctorAssessmentController,
-                            label: state.t(
-                              'Clinical Assessment',
-                              'ক্লিনিক্যাল মূল্যায়ন',
                             ),
-                            maxLines: 2,
-                            isBangla: state.isBangla,
-                          ),
 
-                          SizedBox(height: 12.h),
+                            SizedBox(height: 20.h),
 
-                          HealoraTextField(
-                            controller: controller.doctorPlanController,
-                            label: state.t(
-                              'Management Plan & Advice',
-                              'ব্যবস্থাপনা পরিকল্পনা ও পরামর্শ',
-                            ),
-                            maxLines: 2,
-                            isBangla: state.isBangla,
-                          ),
-
-                          SizedBox(height: 14.h),
-
-                          // Disposition Selector
-                          Text(
-                            state.t(
-                              'Encounter Disposition',
-                              'এনকাউন্টারের চূড়ান্ত সিদ্ধান্ত',
-                            ),
-                            style: HealoraTypography.caption(
-                              color: HealoraColors.slate,
+                            HealoraButton.primary(
+                              fullWidth: true,
+                              label: state.t(
+                                'Sign & Close Clinical Encounter',
+                                'স্বাক্ষর ও চেকআপ সমাপ্ত করুন',
+                              ),
+                              onPressed: () {
+                                if (!controller.submitReview(
+                                  activeEncounter.id,
+                                )) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        state.t(
+                                          'A submitted encounter, assessment, and plan are required before signing.',
+                                          'সাইন করার আগে জমা দেওয়া encounter, assessment ও plan প্রয়োজন।',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: HealoraColors.ink,
+                                    content: Text(
+                                      state.t(
+                                        'Encounter signed by Dr. Tariqul Islam and updated to Patient App timeline.',
+                                        'ডাক্তারের স্বাক্ষর সম্পন্ন ও রোগী অ্যাপের টাইমলাইনে যুক্ত হয়েছে।',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                               isBangla: state.isBangla,
-                            ).copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(height: 6.h),
-                          Container(
-                            height: 52.h,
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            decoration: BoxDecoration(
-                              color: HealoraColors.paper,
-                              borderRadius: HealoraSpacing.borderControl,
-                              border: Border.all(
-                                color: HealoraColors.line,
-                                width: 1,
-                              ),
                             ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<EncounterDisposition>(
-                                value: controller.selectedDisposition,
-                                isExpanded: true,
-                                onChanged: (v) {
-                                  if (v != null)
-                                    controller.selectDisposition(v);
-                                },
-                                items: [
-                                  DropdownMenuItem(
-                                    value: EncounterDisposition.completed,
-                                    child: Text(
-                                      state.t(
-                                        'Routine Completed - Results Sent to Patient App',
-                                        'সম্পন্ন - ফলাফল রোগী অ্যাপে প্রেরণ',
-                                      ),
-                                    ),
-                                  ),
-                                  DropdownMenuItem(
-                                    value:
-                                        EncounterDisposition.followUpRequired,
-                                    child: Text(
-                                      state.t(
-                                        'Follow-up Required at Hub in 14 Days',
-                                        '১৪ দিন পর ফলো-আপ আবশ্যক',
-                                      ),
-                                    ),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: EncounterDisposition
-                                        .teleconsultScheduled,
-                                    child: Text(
-                                      state.t(
-                                        'Schedule Specialist Teleconsultation (Chennai/Bangalore)',
-                                        'বিশেষজ্ঞ টেলি-কনসাল্টেশন শিডিউল',
-                                      ),
-                                    ),
-                                  ),
-                                  DropdownMenuItem(
-                                    value:
-                                        EncounterDisposition.referredToHospital,
-                                    child: Text(
-                                      state.t(
-                                        'Urgent Referral to Sadar 250-Bed Hospital',
-                                        'জরুরি রেফারেল - সদর হাসপাতাল',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(height: 20.h),
-
-                          HealoraButton.primary(
-                            fullWidth: true,
-                            label: state.t(
-                              'Sign & Close Clinical Encounter',
-                              'স্বাক্ষর ও চেকআপ সমাপ্ত করুন',
-                            ),
-                            onPressed: () {
-                              controller.submitReview(activeEncounter.id);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: HealoraColors.ink,
-                                  content: Text(
-                                    state.t(
-                                      'Encounter signed by Dr. Tariqul Islam and updated to Patient App timeline.',
-                                      'ডাক্তারের স্বাক্ষর সম্পন্ন ও রোগী অ্যাপের টাইমলাইনে যুক্ত হয়েছে।',
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            isBangla: state.isBangla,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 );
 
-                if (isTwoCol) {
+                if (canCapture && canReview && isTwoCol) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1062,7 +1116,8 @@ class ClinicalScreen extends StatelessWidget {
                       Expanded(flex: 5, child: observationsAndDoctor),
                     ],
                   );
-                } else {
+                }
+                if (canCapture) {
                   return Column(
                     children: [
                       vitalsForm,
@@ -1071,6 +1126,7 @@ class ClinicalScreen extends StatelessWidget {
                     ],
                   );
                 }
+                return observationsAndDoctor;
               },
             ),
           ],

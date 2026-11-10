@@ -1,4 +1,3 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:healora/core/theme/healora_colors.dart';
@@ -39,7 +38,7 @@ class HealoraTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: HealoraColors.paper,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: HealoraSpacing.borderControl,
           borderSide: const BorderSide(color: HealoraColors.line, width: 1),

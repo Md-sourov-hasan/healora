@@ -122,7 +122,7 @@ class EquipmentScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.equipment.length,
-            separatorBuilder: (_, __) => SizedBox(height: 14.h),
+            separatorBuilder: (_, _) => SizedBox(height: 14.h),
             itemBuilder: (context, idx) {
               final HubEquipment eq = state.equipment[idx];
 

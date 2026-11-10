@@ -24,9 +24,7 @@ class HealoraHeader extends StatelessWidget {
       ),
       decoration: const BoxDecoration(
         color: HealoraColors.paper,
-        border: Border(
-          bottom: BorderSide(color: HealoraColors.line, width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: HealoraColors.line, width: 1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,11 +41,7 @@ class HealoraHeader extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Center(
-                  child: Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                  child: Icon(Icons.favorite, color: Colors.white, size: 20),
                 ),
               ),
               SizedBox(width: 12.w),
@@ -63,7 +57,10 @@ class HealoraHeader extends StatelessWidget {
                     ).copyWith(fontWeight: FontWeight.w700),
                   ),
                   Text(
-                    state.t('Hub Operations & Care Unit', 'হাব অপারেশনস ও কেয়ার ইউনিট'),
+                    state.t(
+                      'Special Team & Doctor App',
+                      'হাব অপারেশনস ও কেয়ার ইউনিট',
+                    ),
                     style: HealoraTypography.micro(
                       color: HealoraColors.slate,
                       isBangla: state.isBangla,
@@ -74,7 +71,10 @@ class HealoraHeader extends StatelessWidget {
               if (isDesktop) ...[
                 SizedBox(width: 20.w),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 14.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: HealoraColors.bone,
                     borderRadius: HealoraSpacing.borderControl,
@@ -83,12 +83,20 @@ class HealoraHeader extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.location_on_outlined, color: HealoraColors.teal, size: 18),
+                      const Icon(
+                        Icons.location_on_outlined,
+                        color: HealoraColors.teal,
+                        size: 18,
+                      ),
                       SizedBox(width: 8.w),
                       DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: state.selectedHubId,
-                          icon: const Icon(Icons.keyboard_arrow_down, color: HealoraColors.slate, size: 18),
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: HealoraColors.slate,
+                            size: 18,
+                          ),
                           isDense: true,
                           style: HealoraTypography.caption(
                             color: HealoraColors.ink,
@@ -118,113 +126,149 @@ class HealoraHeader extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               reverse: true,
               child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Offline simulation toggle
-                InkWell(
-                  onTap: () => state.toggleOfflineMode(),
-                  borderRadius: HealoraSpacing.borderControl,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: state.isOffline ? HealoraColors.warnBg : HealoraColors.mist,
-                      borderRadius: HealoraSpacing.borderControl,
-                      border: Border.all(
-                        color: state.isOffline ? HealoraColors.warn : HealoraColors.line,
-                        width: 1,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Offline simulation toggle
+                  InkWell(
+                    onTap: () => state.toggleOfflineMode(),
+                    borderRadius: HealoraSpacing.borderControl,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: state.isOffline
+                            ? HealoraColors.warnBg
+                            : HealoraColors.mist,
+                        borderRadius: HealoraSpacing.borderControl,
+                        border: Border.all(
+                          color: state.isOffline
+                              ? HealoraColors.warn
+                              : HealoraColors.line,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            state.isOffline ? Icons.wifi_off : Icons.wifi,
+                            color: state.isOffline
+                                ? HealoraColors.warnFg
+                                : HealoraColors.okFg,
+                            size: 16,
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            state.isOffline
+                                ? state.t(
+                                    'Offline (${state.offlineOutbox.length})',
+                                    'অফলাইন (${state.offlineOutbox.length})',
+                                  )
+                                : state.t('Online', 'অনলাইন'),
+                            style: HealoraTypography.caption(
+                              color: state.isOffline
+                                  ? HealoraColors.warnFg
+                                  : HealoraColors.okFg,
+                              isBangla: state.isBangla,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          state.isOffline ? Icons.wifi_off : Icons.wifi,
-                          color: state.isOffline ? HealoraColors.warnFg : HealoraColors.okFg,
-                          size: 16,
-                        ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          state.isOffline
-                              ? state.t('Offline (${state.offlineOutbox.length})', 'অফলাইন (${state.offlineOutbox.length})')
-                              : state.t('Online', 'অনলাইন'),
-                          style: HealoraTypography.caption(
-                            color: state.isOffline ? HealoraColors.warnFg : HealoraColors.okFg,
-                            isBangla: state.isBangla,
-                          ).copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
 
-                SizedBox(width: 10.w),
+                  SizedBox(width: 10.w),
 
-                // Bilingual Toggle: "বাংলা · English"
-                InkWell(
-                  onTap: () => state.toggleLanguage(),
-                  borderRadius: HealoraSpacing.borderControl,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: HealoraColors.paper,
-                      borderRadius: HealoraSpacing.borderControl,
-                      border: Border.all(color: HealoraColors.line, width: 1),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.translate, size: 16, color: HealoraColors.teal),
-                        SizedBox(width: 6.w),
-                        Text(
-                          'বাংলা · EN',
-                          style: HealoraTypography.caption(
-                            color: HealoraColors.ink,
-                            isBangla: true,
-                          ).copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                SizedBox(width: 10.w),
-
-                // Active Role Switcher Dropdown
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: HealoraColors.mist,
+                  // Bilingual Toggle: "বাংলা · English"
+                  InkWell(
+                    onTap: () => state.toggleLanguage(),
                     borderRadius: HealoraSpacing.borderControl,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<HealoraRole>(
-                      value: state.activeRole,
-                      isDense: true,
-                      icon: const Icon(Icons.arrow_drop_down, color: HealoraColors.pine),
-                      style: HealoraTypography.caption(
-                        color: HealoraColors.pine,
-                        isBangla: state.isBangla,
-                      ).copyWith(fontWeight: FontWeight.w700),
-                      onChanged: (HealoraRole? role) {
-                        if (role != null) state.setRole(role);
-                      },
-                      items: HealoraRole.values.map((role) {
-                        return DropdownMenuItem<HealoraRole>(
-                          value: role,
-                          child: Text(state.isBangla ? role.bnDisplayName : role.displayName),
-                        );
-                      }).toList(),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 6.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: HealoraColors.paper,
+                        borderRadius: HealoraSpacing.borderControl,
+                        border: Border.all(color: HealoraColors.line, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.translate,
+                            size: 16,
+                            color: HealoraColors.teal,
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            'বাংলা · EN',
+                            style: HealoraTypography.caption(
+                              color: HealoraColors.ink,
+                              isBangla: true,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                SizedBox(width: 10.w),
+                  SizedBox(width: 10.w),
 
-                // Notification bell with 16px clay badge (Spec Chapter 7.8)
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
+                  // Active Role Switcher Dropdown
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: HealoraColors.mist,
+                      borderRadius: HealoraSpacing.borderControl,
+                    ),
+                    child: Tooltip(
+                      message: state.t(
+                        'Clinical role preview; production roles must come from the authenticated account.',
+                        'Clinical role preview; production roles must come from the authenticated account.',
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<HealoraRole>(
+                          value: state.activeRole,
+                          isDense: true,
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: HealoraColors.pine,
+                          ),
+                          style: HealoraTypography.caption(
+                            color: HealoraColors.pine,
+                            isBangla: state.isBangla,
+                          ).copyWith(fontWeight: FontWeight.w700),
+                          onChanged: (HealoraRole? role) {
+                            if (role != null) state.setRole(role);
+                          },
+                          items: HealoraRole.values.where((role) => role.isTeamClinicalRole).map((role) {
+                            return DropdownMenuItem<HealoraRole>(
+                              value: role,
+                              child: Text(
+                                state.isBangla
+                                    ? role.bnDisplayName
+                                    : role.displayName,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 10.w),
+
+                  InkWell(
+                    onTap: () => state.setNavIndex(9),
+                    borderRadius: BorderRadius.circular(24.r),
+                    child: Container(
                       width: 40.w,
                       height: 40.h,
                       decoration: BoxDecoration(
@@ -238,35 +282,13 @@ class HealoraHeader extends StatelessWidget {
                         size: 20,
                       ),
                     ),
-                    Positioned(
-                      top: 1,
-                      right: 1,
-                      child: Container(
-                        width: 16.w,
-                        height: 16.h,
-                        decoration: const BoxDecoration(
-                          color: HealoraColors.clay,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '3',
-                            style: HealoraTypography.micro(
-                              color: Colors.white,
-                              isBangla: state.isBangla,
-                            ).copyWith(fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }

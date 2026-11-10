@@ -189,7 +189,7 @@ class AuditScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.auditLogs.length,
-            separatorBuilder: (_, __) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => SizedBox(height: 12.h),
             itemBuilder: (context, idx) {
               final AuditLogEntry log = state.auditLogs[idx];
 

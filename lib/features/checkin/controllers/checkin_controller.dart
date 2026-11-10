@@ -10,8 +10,8 @@ class CheckinController extends HealoraFeatureController {
   final TextEditingController walkInPhoneController = TextEditingController();
   final TextEditingController walkInAgeController = TextEditingController();
   String searchFilter = '';
-  String walkInGender = 'Female';
-  bool walkInConsentChecked = true;
+  String? walkInGender;
+  bool walkInConsentChecked = false;
 
   List<Appointment> get filteredAppointments {
     final query = searchFilter.toLowerCase();
@@ -39,24 +39,40 @@ class CheckinController extends HealoraFeatureController {
 
   bool registerWalkIn() {
     final name = walkInNameController.text.trim();
-    if (name.isEmpty) return false;
+    final age = int.tryParse(walkInAgeController.text.trim());
+    if (name.isEmpty ||
+        age == null ||
+        age < 0 ||
+        age > 120 ||
+        walkInGender == null ||
+        !walkInConsentChecked) {
+      return false;
+    }
 
-    state.registerWalkIn(
+    final registered = state.registerWalkIn(
       fullName: name,
-      phone: walkInPhoneController.text.trim().isEmpty
-          ? '+880 1711 000000'
-          : walkInPhoneController.text.trim(),
-      age: int.tryParse(walkInAgeController.text) ?? 45,
-      gender: walkInGender,
+      phone: walkInPhoneController.text.trim(),
+      age: age,
+      gender: walkInGender!,
+      consentConfirmed: walkInConsentChecked,
     );
+    if (!registered) return false;
     walkInNameController.clear();
     walkInPhoneController.clear();
     walkInAgeController.clear();
+    walkInGender = null;
+    walkInConsentChecked = false;
     return true;
   }
 
-  void checkInAppointment(String appointmentId) {
-    state.checkInAppointment(appointmentId);
+  bool checkInAppointment(
+    String appointmentId, {
+    required bool consentConfirmed,
+  }) {
+    return state.checkInAppointment(
+      appointmentId,
+      consentConfirmed: consentConfirmed,
+    );
   }
 
   @override

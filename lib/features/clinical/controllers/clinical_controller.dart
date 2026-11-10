@@ -1,50 +1,49 @@
 import 'package:healora/core/controllers/healora_feature_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/models/clinical_models.dart';
+import 'package:healora/core/controllers/healora_state.dart';
 
 class ClinicalController extends HealoraFeatureController {
   ClinicalController(super.state);
 
-  final TextEditingController systolicController = TextEditingController(
-    text: '136',
-  );
-  final TextEditingController diastolicController = TextEditingController(
-    text: '86',
-  );
-  final TextEditingController pulseController = TextEditingController(
-    text: '78',
-  );
-  final TextEditingController spo2Controller = TextEditingController(
-    text: '98',
-  );
-  final TextEditingController temperatureController = TextEditingController(
-    text: '36.8',
-  );
-  final TextEditingController glucoseController = TextEditingController(
-    text: '7.2',
-  );
-  final TextEditingController heightController = TextEditingController(
-    text: '162',
-  );
-  final TextEditingController weightController = TextEditingController(
-    text: '65.0',
-  );
+  final TextEditingController systolicController = TextEditingController();
+  final TextEditingController diastolicController = TextEditingController();
+  final TextEditingController pulseController = TextEditingController();
+  final TextEditingController spo2Controller = TextEditingController();
+  final TextEditingController temperatureController = TextEditingController();
+  final TextEditingController glucoseController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
   final TextEditingController repeatReasonController = TextEditingController();
   final TextEditingController doctorAssessmentController =
-      TextEditingController(
-        text: 'Stage 1 Hypertension noted with mildly elevated fasting glucose (7.4 mmol/L). Cardiac auscultation normal S1 S2, no pedal edema.',
-      );
-  final TextEditingController doctorPlanController = TextEditingController(
-    text: 'Prescribed lifestyle modification and dietary salt reduction. Scheduled follow-up vitals check at hub in 14 days. Teleconsultation package with Chennai cardiologist recommended.',
-  );
+      TextEditingController();
+  final TextEditingController doctorPlanController = TextEditingController();
 
   String selectedDeviceId = 'Omron HEM-7120 #SN-OMR-98214';
   String glucoseContext = 'Fasting';
   bool isRepeatReading = false;
   EncounterDisposition selectedDisposition = EncounterDisposition.completed;
 
-  Encounter? get activeEncounter =>
-      state.encounters.isEmpty ? null : state.encounters.first;
+  Encounter? get activeEncounter {
+    for (final encounter in state.encounters) {
+      if (state.activeRole == HealoraRole.fieldHealthWorker &&
+          encounter.status != EncounterStatus.completed &&
+          encounter.status != EncounterStatus.submittedForReview &&
+          encounter.status != EncounterStatus.awaitingSync) {
+        return encounter;
+      }
+      if (state.activeRole == HealoraRole.specialTeamLead &&
+          encounter.status != EncounterStatus.completed) {
+        return encounter;
+      }
+      if ((state.activeRole == HealoraRole.localDoctor ||
+              state.activeRole == HealoraRole.registeredMedicalDoctor) &&
+          encounter.status == EncounterStatus.submittedForReview) {
+        return encounter;
+      }
+    }
+    return null;
+  }
 
   String ticketLabel(String ticketId) => ticketId.replaceAll('tkt_', 'TOKEN #');
 
@@ -85,55 +84,93 @@ class ClinicalController extends HealoraFeatureController {
 
   void syncOutbox() => state.syncOutbox();
 
-  void saveObservations(String encounterId) {
-    final reason = isRepeatReading ? repeatReasonController.text : null;
-    state.addObservation(
-      encounterId: encounterId,
-      code: 'bp_sys',
-      label: 'Systolic Blood Pressure',
-      value: systolicController.text.trim(),
-      unit: 'mmHg',
-      contextNote: 'Right arm seated',
-      deviceAttribution: selectedDeviceId,
-      isRepeat: isRepeatReading,
-      repeatReason: reason,
+  bool saveObservations(String encounterId) {
+    final values = <String, double?>{
+      'Systolic blood pressure': double.tryParse(
+        systolicController.text.trim(),
+      ),
+      'Diastolic blood pressure': double.tryParse(
+        diastolicController.text.trim(),
+      ),
+      'Pulse rate': double.tryParse(pulseController.text.trim()),
+      'Oxygen saturation': double.tryParse(spo2Controller.text.trim()),
+      'Temperature': double.tryParse(temperatureController.text.trim()),
+      'Blood glucose': double.tryParse(glucoseController.text.trim()),
+      'Height': double.tryParse(heightController.text.trim()),
+      'Weight': double.tryParse(weightController.text.trim()),
+    };
+    if (values.values.any(
+          (value) => value == null || !value.isFinite || value <= 0,
+        ) ||
+        (isRepeatReading && repeatReasonController.text.trim().isEmpty)) {
+      return false;
+    }
+
+    final reason = isRepeatReading ? repeatReasonController.text.trim() : null;
+    void add(
+      String code,
+      String label,
+      String value,
+      String unit, {
+      String? contextNote,
+      String? device,
+    }) {
+      state.addObservation(
+        encounterId: encounterId,
+        code: code,
+        label: label,
+        value: value.trim(),
+        unit: unit,
+        contextNote: contextNote,
+        deviceAttribution: device ?? selectedDeviceId,
+        isRepeat: isRepeatReading,
+        repeatReason: reason,
+      );
+    }
+
+    add(
+      'bp_sys',
+      'Systolic Blood Pressure',
+      systolicController.text,
+      'mmHg',
+      contextNote: 'Right arm, seated',
     );
-    state.addObservation(
-      encounterId: encounterId,
-      code: 'bp_dia',
-      label: 'Diastolic Blood Pressure',
-      value: diastolicController.text.trim(),
-      unit: 'mmHg',
-      contextNote: 'Right arm seated',
-      deviceAttribution: selectedDeviceId,
-      isRepeat: isRepeatReading,
-      repeatReason: reason,
+    add(
+      'bp_dia',
+      'Diastolic Blood Pressure',
+      diastolicController.text,
+      'mmHg',
+      contextNote: 'Right arm, seated',
     );
-    state.addObservation(
-      encounterId: encounterId,
-      code: 'pulse',
-      label: 'Pulse Rate',
-      value: pulseController.text.trim(),
-      unit: 'bpm',
-      deviceAttribution: selectedDeviceId,
-      isRepeat: isRepeatReading,
-    );
-    final glucose = double.tryParse(glucoseController.text);
-    state.addObservation(
-      encounterId: encounterId,
-      code: 'glucose',
-      label: 'Blood Glucose',
-      value: glucoseController.text.trim(),
-      unit: 'mmol/L',
+    add('pulse', 'Pulse Rate', pulseController.text, 'bpm');
+    add('spo2', 'Oxygen Saturation', spo2Controller.text, '%');
+    add('temperature', 'Temperature', temperatureController.text, '\u00B0C');
+    add(
+      'glucose',
+      'Blood Glucose',
+      glucoseController.text,
+      'mmol/L',
       contextNote: glucoseContext,
-      deviceAttribution: 'Accu-Chek Instant #SN-ROCHE-44102',
-      isRepeat: isRepeatReading,
-      isAbnormal: glucose != null && glucose > 7.0,
-      repeatReason: reason,
+      device: 'Accu-Chek Instant #SN-ROCHE-44102',
     );
+    add('height', 'Height', heightController.text, 'cm');
+    add('weight', 'Weight', weightController.text, 'kg');
+    state.submitEncounterForReview(encounterId);
+    return true;
   }
 
-  void submitReview(String encounterId) {
+  bool submitReview(String encounterId) {
+    if (doctorAssessmentController.text.trim().isEmpty ||
+        doctorPlanController.text.trim().isEmpty ||
+        (state.activeRole != HealoraRole.localDoctor &&
+            state.activeRole != HealoraRole.registeredMedicalDoctor) ||
+        !state.encounters.any(
+          (encounter) =>
+              encounter.id == encounterId &&
+              encounter.status == EncounterStatus.submittedForReview,
+        )) {
+      return false;
+    }
     state.submitDoctorReview(
       encounterId: encounterId,
       doctorName: 'Dr. Tariqul Islam',
@@ -142,6 +179,7 @@ class ClinicalController extends HealoraFeatureController {
       plan: doctorPlanController.text.trim(),
       disposition: selectedDisposition,
     );
+    return true;
   }
 
   @override

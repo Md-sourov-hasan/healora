@@ -8,6 +8,7 @@ import 'package:healora/core/common/widgets/healora_card.dart';
 import 'package:healora/core/common/widgets/healora_button.dart';
 import 'package:healora/core/common/widgets/healora_status_pill.dart';
 import 'package:healora/core/common/widgets/healora_input.dart';
+import 'package:healora/core/common/widgets/ticket_qr_download_button.dart';
 import 'package:healora/features/checkin/controllers/checkin_controller.dart';
 
 class CheckinScreen extends StatelessWidget {
@@ -112,7 +113,7 @@ class CheckinScreen extends StatelessWidget {
           HealoraSearchBar(
             controller: controller.searchController,
             hintText: state.t(
-              'Search by Appointment Code (APT-...), Patient Name, or Phone Number...',
+              'Search by Healora patient code, appointment code, or registered phone...',
               'অ্যাপয়েন্টমেন্ট কোড (APT-...), রোগীর নাম বা ফোন নম্বর দিয়ে খুঁজুন...',
             ),
             onChanged: controller.setSearchFilter,
@@ -135,13 +136,22 @@ class CheckinScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: filteredAppointments.length,
-            separatorBuilder: (_, __) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => SizedBox(height: 12.h),
             itemBuilder: (context, idx) {
               final Appointment appt = filteredAppointments[idx];
               final bool isCheckedIn =
                   appt.status == AppointmentStatus.checkedIn ||
                   appt.status == AppointmentStatus.inService ||
                   appt.status == AppointmentStatus.completed;
+              final bool canConfirmArrival =
+                  appt.status == AppointmentStatus.confirmed ||
+                  appt.status == AppointmentStatus.arrived;
+              final matchingTickets = state.queue
+                  .where((ticket) => ticket.appointmentId == appt.id)
+                  .toList();
+              final QueueTicket? ticket = matchingTickets.isEmpty
+                  ? null
+                  : matchingTickets.first;
 
               return HealoraCard(
                 child: Row(
@@ -225,7 +235,7 @@ class CheckinScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            '${appt.patientAge} ${state.t("yrs", "বছর")}, ${appt.patientGender} · ${appt.patientPhone} · ${appt.sessionTitle}',
+                            '${appt.appointmentCode} · ${appt.sessionTitle}',
                             style: HealoraTypography.caption(
                               color: HealoraColors.slate,
                               isBangla: state.isBangla,
@@ -244,29 +254,16 @@ class CheckinScreen extends StatelessWidget {
                     ),
 
                     // Action
-                    if (!isCheckedIn) ...[
+                    if (canConfirmArrival) ...[
                       HealoraButton.primary(
                         label: state.t(
                           'Confirm Arrival & Issue Token',
                           'উপস্থিতি ও টোকেন দিন',
                         ),
-                        onPressed: () {
-                          controller.checkInAppointment(appt.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: HealoraColors.ink,
-                              content: Text(
-                                state.t(
-                                  'Checked in ${appt.patientName}. Token issued & queued to Station 2.',
-                                  '${appt.patientName} চেক-ইন সম্পন্ন ও টোকেন ইস্যু করা হয়েছে।',
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                        onPressed: () => _confirmCheckIn(context, appt),
                         isBangla: state.isBangla,
                       ),
-                    ] else ...[
+                    ] else if (isCheckedIn) ...[
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 14.w,
@@ -297,13 +294,110 @@ class CheckinScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                    ] else ...[
+                      HealoraStatusPill(
+                        label: appt.statusLabel,
+                        type: HealoraPillType.draft,
+                      ),
                     ],
+                    if (isCheckedIn && ticket != null)
+                      TicketQrDownloadButton(
+                        ticket: ticket,
+                        hubName: state.hubs
+                            .firstWhere((hub) => hub.id == ticket.hubId)
+                            .name,
+                        isBangla: state.isBangla,
+                        compact: true,
+                      ),
                   ],
                 ),
               );
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _confirmCheckIn(
+    BuildContext context,
+    Appointment appointment,
+  ) async {
+    bool verifiedAndConsented = false;
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(
+            controller.state.t(
+              'Verify identity and consent',
+              'পরিচয় ও সম্মতি যাচাই করুন',
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${appointment.patientName} | ${appointment.appointmentCode}',
+              ),
+              SizedBox(height: 12.h),
+              CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                value: verifiedAndConsented,
+                onChanged: (value) =>
+                    setDialogState(() => verifiedAndConsented = value ?? false),
+                title: Text(
+                  controller.state.t(
+                    'I verified this is the intended patient or authorised representative and explained this hub visit.',
+                    'আমি রোগী বা অনুমোদিত প্রতিনিধির পরিচয় যাচাই করেছি এবং হাব ভিজিটের তথ্য জানিয়েছি।',
+                  ),
+                ),
+              ),
+              Text(
+                controller.state.t(
+                  'Consent applies to this visit only. Telemedicine and overseas sharing need separate permission.',
+                  'সম্মতি শুধু এই ভিজিটের জন্য। টেলিমেডিসিন ও বিদেশে তথ্য শেয়ারে আলাদা অনুমতি প্রয়োজন।',
+                ),
+                style: HealoraTypography.micro(
+                  color: HealoraColors.slate,
+                  isBangla: controller.state.isBangla,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(controller.state.t('Cancel', 'বাতিল')),
+            ),
+            FilledButton(
+              onPressed: verifiedAndConsented
+                  ? () => Navigator.pop(dialogContext, true)
+                  : null,
+              child: Text(
+                controller.state.t('Confirm check-in', 'চেক-ইন নিশ্চিত করুন'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    final checkedIn = controller.checkInAppointment(
+      appointment.id,
+      consentConfirmed: true,
+    );
+    if (!checkedIn) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: HealoraColors.ink,
+        content: Text(
+          controller.state.t(
+            'Consent recorded. Patient checked in and added to the reception queue.',
+            'সম্মতি সংরক্ষিত। রোগীর চেক-ইন সম্পন্ন, রিসেপশন কিউতে যোগ হয়েছে।',
+          ),
+        ),
       ),
     );
   }
@@ -425,8 +519,8 @@ class CheckinScreen extends StatelessWidget {
                           Expanded(
                             child: Text(
                               controller.state.t(
-                                'Informed Consent Confirmed: Patient agreed to in-person measurement collection and shared electronic health record creation under Bangladesh Personal Data Protection Act 2026.',
-                                'অবহিত সম্মতি নিশ্চিতকরণ: রোগী ব্যক্তিগত তথ্য সুরক্ষা আইন ২০২৬ মোতাবেক পরিমাপ গ্রহণ এবং কেন্দ্রীয় স্বাস্থ্য নথিতে তথ্য সংরক্ষণে সম্মতি জানিয়েছেন।',
+                                'Consent covers measurements for this hub visit and the linked Healora encounter only. Telemedicine or overseas sharing needs separate permission.',
+                                'এই হাব ভিজিটের মাপ ও সংশ্লিষ্ট Healora encounter-এর জন্যই সম্মতি। টেলিমেডিসিন বা বিদেশে তথ্য শেয়ারে আলাদা অনুমতি লাগবে।',
                               ),
                               style: HealoraTypography.micro(
                                 color: HealoraColors.pine,
@@ -452,7 +546,19 @@ class CheckinScreen extends StatelessWidget {
                     'নিবন্ধন ও টোকেন তৈরি করুন',
                   ),
                   onPressed: () {
-                    if (!controller.registerWalkIn()) return;
+                    if (!controller.registerWalkIn()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            controller.state.t(
+                              'Check the required fields and consent, or use an available walk-in session.',
+                              'Complete the required fields and consent, or choose an available walk-in session.',
+                            ),
+                          ),
+                        ),
+                      );
+                      return;
+                    }
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

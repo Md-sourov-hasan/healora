@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
-import 'package:healora/core/common/widgets/healora_button.dart';
 
 enum HealoraCardVariant {
   elevated, // Default card with card shadow
@@ -82,7 +81,7 @@ class _HealoraCardState extends State<HealoraCard> {
     switch (widget.variant) {
       case HealoraCardVariant.elevated:
         bgColor = HealoraColors.paper;
-        border = Border.all(color: HealoraColors.line.withOpacity(0.4), width: 0.5);
+        border = Border.all(color: HealoraColors.line.withValues(alpha: 0.4), width: 0.5);
         // Chapter 12: On desktop web hover: cards lift to Float shadow
         shadows = (_isHovered && widget.onTap != null)
             ? HealoraColors.floatShadow
@@ -188,7 +187,7 @@ class HealoraStatTile extends StatelessWidget {
                   ),
                 ),
               ),
-              if (icon != null) icon!,
+              ?icon,
             ],
           ),
           SizedBox(height: 6.h),

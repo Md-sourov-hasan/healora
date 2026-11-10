@@ -136,7 +136,7 @@ class HubsScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: filteredHubs.length,
-            separatorBuilder: (_, __) => SizedBox(height: 16.h),
+            separatorBuilder: (_, _) => SizedBox(height: 16.h),
             itemBuilder: (context, idx) {
               final Hub hub = filteredHubs[idx];
               final bool isCurrentlySelected = hub.id == state.selectedHubId;

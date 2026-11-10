@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:healora/main.dart';
 import 'package:healora/core/services/healora_state.dart';
 import 'package:healora/core/models/hub_models.dart';
-import 'package:healora/core/models/appointment_models.dart';
 import 'package:healora/core/models/clinical_models.dart';
 
 void main() {
@@ -44,7 +43,7 @@ void main() {
       final initialEncountersLen = state.encounters.length;
 
       // Check in appointment apt_04
-      state.checkInAppointment('apt_04');
+      state.checkInAppointment('apt_04', consentConfirmed: true);
 
       expect(state.queue.length, equals(initialQueueLen + 1));
       expect(state.encounters.length, equals(initialEncountersLen + 1));
@@ -63,6 +62,7 @@ void main() {
         phone: '+880 1711 999888',
         age: 60,
         gender: 'Male',
+        consentConfirmed: true,
       );
 
       expect(state.sessions.first.walkInCurrent, equals(initialWalkIn + 1));

@@ -105,7 +105,7 @@ class _HealoraTextFieldState extends State<HealoraTextField> {
               isDense: true,
               hintText: widget.hintText,
               hintStyle: HealoraTypography.body(
-                color: HealoraColors.slate.withOpacity(0.7),
+                color: HealoraColors.slate.withValues(alpha: 0.7),
                 isBangla: widget.isBangla,
               ),
               prefixIcon: widget.prefixIcon != null
@@ -173,7 +173,7 @@ class HealoraSearchBar extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: HealoraTypography.body(
-                  color: HealoraColors.slate.withOpacity(0.7),
+                  color: HealoraColors.slate.withValues(alpha: 0.7),
                   isBangla: isBangla,
                 ),
                 border: InputBorder.none,

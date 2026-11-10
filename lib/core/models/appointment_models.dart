@@ -238,3 +238,37 @@ class ConsentRecord {
   });
 }
 
+class NotificationItem {
+  final String id;
+  final String category; // 'Appointment', 'Queue', 'Clinical', 'Consent'
+  final String title;
+  final String body;
+  final String timestamp;
+  final bool isRead;
+  final String? appointmentId;
+
+  const NotificationItem({
+    required this.id,
+    required this.category,
+    required this.title,
+    required this.body,
+    required this.timestamp,
+    this.isRead = false,
+    this.appointmentId,
+  });
+
+  NotificationItem copyWith({
+    bool? isRead,
+  }) {
+    return NotificationItem(
+      id: id,
+      category: category,
+      title: title,
+      body: body,
+      timestamp: timestamp,
+      isRead: isRead ?? this.isRead,
+      appointmentId: appointmentId,
+    );
+  }
+}
+

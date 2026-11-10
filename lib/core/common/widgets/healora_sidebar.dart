@@ -23,11 +23,7 @@ class HealoraSidebar extends StatelessWidget {
   final HealoraState state;
   final bool isTablet;
 
-  const HealoraSidebar({
-    super.key,
-    required this.state,
-    this.isTablet = false,
-  });
+  const HealoraSidebar({super.key, required this.state, this.isTablet = false});
 
   static const List<NavItem> navItems = [
     NavItem(
@@ -76,23 +72,28 @@ class HealoraSidebar extends StatelessWidget {
       icon: Icons.verified_user_outlined,
     ),
     NavItem(
-      titleEn: 'Patient View Preview',
-      titleBn: 'রোগী অ্যাপ ভিউ',
-      icon: Icons.phone_android_outlined,
+      titleEn: 'Notifications',
+      titleBn: 'নোটিফিকেশন',
+      icon: Icons.notifications_none_outlined,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final double width = isTablet ? HealoraSpacing.iconRailWidth : HealoraSpacing.sidebarWidth;
+    final double width =
+        (isTablet ? HealoraSpacing.iconRailWidth : HealoraSpacing.sidebarWidth)
+            .w;
+    final List<MapEntry<int, NavItem>> visibleItems = [
+      for (var i = 0; i < navItems.length; i++)
+        if (state.activeRole.allowedNavIndexes.contains(i))
+          MapEntry(i, navItems[i]),
+    ];
 
     return Container(
       width: width,
       decoration: const BoxDecoration(
         color: HealoraColors.paper,
-        border: Border(
-          right: BorderSide(color: HealoraColors.line, width: 1),
-        ),
+        border: Border(right: BorderSide(color: HealoraColors.line, width: 1)),
       ),
       child: Column(
         children: [
@@ -101,22 +102,25 @@ class HealoraSidebar extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
-              itemCount: navItems.length,
-              separatorBuilder: (_, __) => SizedBox(height: 4.h),
+              itemCount: visibleItems.length,
+              separatorBuilder: (_, _) => SizedBox(height: 4.h),
               itemBuilder: (context, index) {
-                final NavItem item = navItems[index];
-                final bool isSelected = state.currentNavIndex == index;
+                final int navIndex = visibleItems[index].key;
+                final NavItem item = visibleItems[index].value;
+                final bool isSelected = state.currentNavIndex == navIndex;
 
                 if (isTablet) {
                   return Tooltip(
                     message: state.t(item.titleEn, item.titleBn),
                     child: InkWell(
-                      onTap: () => state.setNavIndex(index),
+                      onTap: () => state.setNavIndex(navIndex),
                       borderRadius: HealoraSpacing.borderControl,
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
-                          color: isSelected ? HealoraColors.ink : Colors.transparent,
+                          color: isSelected
+                              ? HealoraColors.ink
+                              : Colors.transparent,
                           borderRadius: HealoraSpacing.borderControl,
                         ),
                         child: Column(
@@ -125,7 +129,9 @@ class HealoraSidebar extends StatelessWidget {
                             Icon(
                               item.icon,
                               size: 22,
-                              color: isSelected ? Colors.white : HealoraColors.slate,
+                              color: isSelected
+                                  ? Colors.white
+                                  : HealoraColors.slate,
                             ),
                             SizedBox(height: 4.h),
                             Text(
@@ -133,7 +139,9 @@ class HealoraSidebar extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: HealoraTypography.micro(
-                                color: isSelected ? Colors.white : HealoraColors.slate,
+                                color: isSelected
+                                    ? Colors.white
+                                    : HealoraColors.slate,
                                 isBangla: state.isBangla,
                               ),
                             ),
@@ -146,13 +154,15 @@ class HealoraSidebar extends StatelessWidget {
 
                 // Desktop sidebar item
                 return InkWell(
-                  onTap: () => state.setNavIndex(index),
+                  onTap: () => state.setNavIndex(navIndex),
                   borderRadius: HealoraSpacing.borderControl,
                   child: Container(
                     height: 44.h,
                     padding: EdgeInsets.symmetric(horizontal: 14.w),
                     decoration: BoxDecoration(
-                      color: isSelected ? HealoraColors.ink : Colors.transparent,
+                      color: isSelected
+                          ? HealoraColors.ink
+                          : Colors.transparent,
                       borderRadius: HealoraSpacing.borderControl,
                     ),
                     child: Row(
@@ -160,15 +170,21 @@ class HealoraSidebar extends StatelessWidget {
                         Icon(
                           item.icon,
                           size: 20,
-                          color: isSelected ? Colors.white : HealoraColors.slate,
+                          color: isSelected
+                              ? Colors.white
+                              : HealoraColors.slate,
                         ),
                         SizedBox(width: 12.w),
                         Expanded(
                           child: Text(
                             state.t(item.titleEn, item.titleBn),
                             style: HealoraTypography.bodySmall(
-                              color: isSelected ? Colors.white : HealoraColors.ink,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                              color: isSelected
+                                  ? Colors.white
+                                  : HealoraColors.ink,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
                               isBangla: state.isBangla,
                             ),
                           ),
@@ -217,7 +233,10 @@ class HealoraSidebar extends StatelessWidget {
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
-                          state.t('DHAKA SERVER REGION', 'ঢাকা সার্ভার রিজিয়ন'),
+                          state.t(
+                            'বাংলাদেশ অঞ্চল নির্বাচিত',
+                            'BANGLADESH REGION SELECTED',
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: HealoraTypography.label(
@@ -230,7 +249,10 @@ class HealoraSidebar extends StatelessWidget {
                   ),
                   SizedBox(height: 6.h),
                   Text(
-                    state.t('PDPA 2026 In-Country Residency Verified', 'ব্যক্তিগত তথ্য সুরক্ষা আইন ২০২৬ অনুসারী'),
+                    state.t(
+                      'Bangladesh region selected',
+                      'Deployment and residency require confirmation',
+                    ),
                     style: HealoraTypography.micro(
                       color: HealoraColors.slate,
                       isBangla: state.isBangla,
@@ -250,57 +272,52 @@ class HealoraSidebar extends StatelessWidget {
 class HealoraFloatingTabBar extends StatelessWidget {
   final HealoraState state;
 
-  const HealoraFloatingTabBar({
-    super.key,
-    required this.state,
-  });
+  const HealoraFloatingTabBar({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
+    final List<int> visibleIndexes = state.activeRole.allowedNavIndexes;
     return Positioned(
-      left: 12,
-      right: 12,
-      bottom: 24,
+      left: 12.w,
+      right: 12.w,
+      bottom: 24.h,
       child: Container(
-        height: HealoraSpacing.tabBarHeight,
+        height: HealoraSpacing.tabBarHeight.h,
         decoration: BoxDecoration(
           color: HealoraColors.paper,
           borderRadius: HealoraSpacing.borderBar,
           boxShadow: HealoraColors.floatShadow,
-          border: Border.all(color: HealoraColors.line.withOpacity(0.5), width: 1),
+          border: Border.all(
+            color: HealoraColors.line.withValues(alpha: 0.5),
+            width: 1,
+          ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildMobileTab(0, Icons.dashboard_outlined, 'Overview', 'সারসংক্ষেপ'),
-            _buildMobileTab(3, Icons.format_list_numbered, 'Queue', 'কিউ'),
-            // Center raised button for Clinical Vitals Capture
-            GestureDetector(
-              onTap: () => state.setNavIndex(5),
-              child: Container(
-                width: 52.w,
-                height: 52.h,
-                decoration: BoxDecoration(
-                  color: HealoraColors.ink,
-                  shape: BoxShape.circle,
-                  boxShadow: HealoraColors.raisedShadow,
-                ),
-                child: const Icon(
-                  Icons.monitor_heart,
-                  color: Colors.white,
-                  size: 26,
-                ),
-              ),
-            ),
-            _buildMobileTab(4, Icons.person_add_alt_1, 'Check-in', 'চেক-ইন'),
-            _buildMobileTab(9, Icons.phone_android, 'Patient', 'রোগী'),
-          ],
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          itemCount: visibleIndexes.length,
+          separatorBuilder: (_, _) => SizedBox(width: 8.w),
+          itemBuilder: (context, index) {
+            final int navIndex = visibleIndexes[index];
+            final NavItem item = HealoraSidebar.navItems[navIndex];
+            return _buildMobileTab(
+              navIndex,
+              item.icon,
+              item.titleEn,
+              item.titleBn,
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildMobileTab(int index, IconData icon, String labelEn, String labelBn) {
+  Widget _buildMobileTab(
+    int index,
+    IconData icon,
+    String labelEn,
+    String labelBn,
+  ) {
     final bool isSelected = state.currentNavIndex == index;
     return InkWell(
       onTap: () => state.setNavIndex(index),
@@ -318,10 +335,13 @@ class HealoraFloatingTabBar extends StatelessWidget {
             SizedBox(height: 2.h),
             Text(
               state.t(labelEn, labelBn),
-              style: HealoraTypography.micro(
-                color: isSelected ? HealoraColors.ink : HealoraColors.slate,
-                isBangla: state.isBangla,
-              ).copyWith(fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500),
+              style:
+                  HealoraTypography.micro(
+                    color: isSelected ? HealoraColors.ink : HealoraColors.slate,
+                    isBangla: state.isBangla,
+                  ).copyWith(
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  ),
             ),
           ],
         ),

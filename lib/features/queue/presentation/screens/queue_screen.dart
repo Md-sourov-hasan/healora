@@ -8,6 +8,7 @@ import 'package:healora/core/models/hub_models.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
 import 'package:healora/core/common/widgets/healora_button.dart';
 import 'package:healora/core/common/widgets/healora_status_pill.dart';
+import 'package:healora/core/common/widgets/ticket_qr_download_button.dart';
 import 'package:healora/features/queue/controllers/queue_controller.dart';
 
 class QueueScreen extends StatelessWidget {
@@ -489,6 +490,12 @@ class QueueScreen extends StatelessWidget {
     final state = controller.state;
     return [
       if (!controller.isPublicDisplayMode) ...[
+        TicketQrDownloadButton(
+          ticket: tkt,
+          hubName: state.hubs.firstWhere((hub) => hub.id == tkt.hubId).name,
+          isBangla: state.isBangla,
+          compact: true,
+        ),
         if (tkt.status == QueueStatus.waiting) ...[
           HealoraButton.small(
             label: state.t('Call Patient', 'রোগীকে ডাকুন'),

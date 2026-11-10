@@ -256,7 +256,7 @@ class DashboardScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.sessions.length,
-            separatorBuilder: (_, __) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => SizedBox(height: 12.h),
             itemBuilder: (context, idx) {
               final HubSession session = state.sessions[idx];
               final double fillRatio = session.totalCapacity > 0

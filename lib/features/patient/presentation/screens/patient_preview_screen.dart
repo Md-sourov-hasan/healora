@@ -1,6 +1,9 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:healora/core/theme/healora_colors.dart';
+import 'package:healora/core/controllers/healora_state.dart';
+import 'package:healora/core/models/appointment_models.dart';
+import 'package:healora/core/common/widgets/ticket_qr_download_button.dart';
 import 'package:healora/core/theme/healora_spacing.dart';
 import 'package:healora/core/theme/healora_typography.dart';
 import 'package:healora/core/common/widgets/healora_card.dart';
@@ -17,6 +20,14 @@ class PatientPreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = controller.state;
+    final patientTickets = state.activeRole == HealoraRole.patient
+        ? state.queue
+              .where((ticket) => ticket.patientCode == 'PAT-BD-89211')
+              .toList()
+        : <QueueTicket>[];
+    final QueueTicket? patientTicket = patientTickets.isEmpty
+        ? null
+        : patientTickets.first;
 
     return Center(
       child: Container(
@@ -74,10 +85,7 @@ class PatientPreviewScreen extends StatelessWidget {
                 decoration: const BoxDecoration(
                   gradient: HealoraColors.washGradient,
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                  vertical: 16.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -129,49 +137,25 @@ class PatientPreviewScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // Notification Icon with Clay Badge
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 40.w,
-                              height: 40.h,
-                              decoration: BoxDecoration(
-                                color: HealoraColors.paper,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: HealoraColors.line,
-                                  width: 1,
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.notifications_outlined,
-                                size: 20,
+                        InkWell(
+                          onTap: () => state.setNavIndex(10),
+                          borderRadius: BorderRadius.circular(24.r),
+                          child: Container(
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                              color: HealoraColors.paper,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: HealoraColors.line,
+                                width: 1,
                               ),
                             ),
-                            Positioned(
-                              top: -2,
-                              right: -2,
-                              child: Container(
-                                width: 16.w,
-                                height: 16.h,
-                                decoration: const BoxDecoration(
-                                  color: HealoraColors.clay,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '2',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            child: const Icon(
+                              Icons.notifications_outlined,
+                              size: 20,
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -192,10 +176,7 @@ class PatientPreviewScreen extends StatelessWidget {
               ),
 
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                  vertical: 12.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -317,6 +298,70 @@ class PatientPreviewScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+
+                    if (patientTicket != null) ...[
+                      SizedBox(height: 12.h),
+                      HealoraCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.t('HUB VISIT TICKET', 'হাব ভিজিট টিকিট'),
+                              style: HealoraTypography.label(
+                                color: HealoraColors.slate,
+                                isBangla: state.isBangla,
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.qr_code_2_outlined,
+                                  color: HealoraColors.teal,
+                                  size: 28,
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        patientTicket.tokenNumber,
+                                        style: HealoraTypography.h3(
+                                          color: HealoraColors.pine,
+                                          isBangla: state.isBangla,
+                                        ),
+                                      ),
+                                      Text(
+                                        state.t(
+                                          'Show this ticket at the hub',
+                                          'হাবে এই টিকিটটি দেখান',
+                                        ),
+                                        style: HealoraTypography.caption(
+                                          color: HealoraColors.slate,
+                                          isBangla: state.isBangla,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            TicketQrDownloadButton(
+                              ticket: patientTicket,
+                              hubName: state.hubs
+                                  .firstWhere(
+                                    (hub) => hub.id == patientTicket.hubId,
+                                  )
+                                  .name,
+                              isBangla: state.isBangla,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
 
                     SizedBox(height: 16.h),
 
